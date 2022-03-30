@@ -9,7 +9,12 @@ walker init {
         y=y+" World"; # the + concatenates
     }
     std.out(x);
-    for i=0 to i<3 by i+=1: # single line block
+    i = 0;
+    while (i<x){
         std.out(x-i,'-', y); # prints to screen
+        i=i+1;
+    }
+    // for i=0 to i<3 by i+=1: # single line block
+    //     std.out(x-i,'-', y); # prints to screen
     report [x, y+'s']; # adds data to payload
 }
