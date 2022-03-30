@@ -4,7 +4,7 @@ walker init {
     y = "Hello";
     z = 3.45;
 
-    if(z==3.45 and y=="Bye"){
+    if(z!=3.45 and y=="Bye"){
         x=x-1;
         y=y+" World"; # the + concatenates
     }
