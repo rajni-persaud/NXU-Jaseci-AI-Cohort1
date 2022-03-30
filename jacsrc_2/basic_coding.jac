@@ -1,3 +1,4 @@
+# This programs contains if statement and for loop
 walker init {
     x = 34 - 30; # This is a comment
     y = "Hello";
