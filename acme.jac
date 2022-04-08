@@ -33,22 +33,11 @@ walker build_example{
     services_node --> appointment_node;
     details_node <--> more_details_node;
     goodbye_node --> here;
-    info_node --> goodbye_node;
-    customers_node --> goodbye_node;
-    appointment_node --> goodbye_node;
-    payment_node --> goodbye_node;
-    services_node --> goodbye_node;
-    promotions_node --> goodbye_node;
-    covid_node --> goodbye_node;
-    details_node --> goodbye_node;
-    more_details_node --> goodbye_node;
-    cancel_node --> goodbye_node;
-    schedule_node --> goodbye_node;
-    reschedule_node --> goodbye_node;
-    gift_node --> goodbye_node;
-    refund_node --> goodbye_node;
-    discount_node --> goodbye_node;
-    special_occasions --> goodbye_node;
+    node_bye = [info_node, customers_node, appointment_node, payment_node, services_node,
+                promotions_node, covid_node, details_node, more_details_node, cancel_node,
+                schedule_node, reschedule_node, gift_node, refund_node, discount_node, 
+                special_occasions]; //all nodes connected to goodbye node
+    for i in node_bye: i --> goodbye_node;
 }
 
 walker init{
