@@ -61,4 +61,6 @@ walker init{
         //spawn here walker::get_names;
         // disengage;
     }
+
+    for i in -->: std.out(i.context);
 }
