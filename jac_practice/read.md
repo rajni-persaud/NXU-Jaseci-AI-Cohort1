@@ -1,0 +1,1 @@
+This folder contains practice examples from jaseci bible.pdf
