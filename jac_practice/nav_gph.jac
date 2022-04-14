@@ -19,8 +19,9 @@ walker init{
         hop_state: spawn here walker::hop_buildout;
 
         state {
-        state_visits += 1;
-        std.out(here.response+state_visits.str);
+            state_visits += 1;
+            std.out(here.response+state_visits.str);
+        }
     }
 
     take -->;
