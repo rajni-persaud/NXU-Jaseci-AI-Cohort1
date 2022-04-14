@@ -15,13 +15,13 @@ walker init{
         save_root = here;
         hop1 = spawn here -[hop]-> node::hop_state;
         hop2 = spawn here -[hop]-> node::hop_state;
+    }
 
-        hop_state: spawn here walker::hop_buildout;
+    hop_state: spawn here walker::hop_buildout;
 
-        state {
-            state_visits += 1;
-            std.out(here.response+state_visits.str);
-        }
+    state {
+        state_visits += 1;
+        std.out(here.response+state_visits.str);
     }
 
     take -->;
@@ -32,6 +32,4 @@ walker hop_buildout {
     spawn here --> node::state;
     spawn here --> node::state;
     spawn here --> node::state;
-}
-
 }
