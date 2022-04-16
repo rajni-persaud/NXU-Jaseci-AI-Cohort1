@@ -8,7 +8,7 @@ walker talker{
     main_intents = [
         "website",
         "mobile app",
-        "info system",
+        "information systems",
         "back",
         "goodbye"
     ];
