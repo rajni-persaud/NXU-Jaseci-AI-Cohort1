@@ -10,7 +10,7 @@ walker talker{
         "mobile app",
         "info system",
         "back",
-        "bye"
+        "goodbye"
     ];
 
     website_intents = [
@@ -18,7 +18,7 @@ walker talker{
         "5-page", 
         "custom", 
         "back",
-        "bye"
+        "goodbye"
     ];
 
     mobile_app_intents = [
@@ -26,12 +26,12 @@ walker talker{
         "social", 
         "custom", 
         "back",
-        "bye"
+        "goodbye"
     ];
 
     info_system_intents = [
         "back",
-        "bye"
+        "goodbye"
     ];
 
     state {
@@ -64,11 +64,12 @@ walker talker{
 
         user_intent = current_intents[max_index];
 
-        if(user_intent == "bye"): disengage;
+        if(user_intent == current_intents[-1]): disengage;
 
         take -[transition(intent == user_intent)]-> node::state else {
             take here;
         std.out(current_intents);
+        std.out(user_intent);
         }
     }
 }
