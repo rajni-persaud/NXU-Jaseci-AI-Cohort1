@@ -17,7 +17,7 @@ graph main_graph {
                         message = "Hi, How can I help you today?",
                         prompts = ["website", "mobile app", "information systems", "quit"]
                     );
-        
+
         website = spawn main_root -[transition(intent="website")]-> node::state(
                         title = "Website",
                         message = "Type of website?",
@@ -37,6 +37,20 @@ graph main_graph {
                         message = "Tell me about the information system you'd like.",
                         prompts = ["back"]
                     );
+        
+        
+        bye_node = spawn node::state(title="Goodbye", message="I'm always happy to help :)", prompts="");
+
+        all_nodes = [main_root];
+
+        main_root_nodes =[website, mobile_app, info_system];
+        for i in main_root_nodes: all_nodes.list::append(i);
+
+        website_nodes =[];
+        mobile_app_nodes =[];
+        info_system_nodes = [];
+
+        for n in all_nodes: n -[transition(intent="goodbye")]-> bye_node;
     }
 
 }

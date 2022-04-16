@@ -41,6 +41,8 @@ walker talker{
         if (here.title == "Mobile App"): current_intents = mobile_app_intents;
         if (here.title == "Information systems"): current_intents = info_system_intents;
 
+        if(here.title == "Goodbye"): disengage;
+
         std.out(here.message);
 
         utterance = std.input("> ");
@@ -63,8 +65,6 @@ walker talker{
         max_index = a_scores.list::index(max_score);
 
         user_intent = current_intents[max_index];
-
-        if(user_intent == current_intents[-1]): disengage;
 
         take -[transition(intent == user_intent)]-> node::state else {
             take here;
