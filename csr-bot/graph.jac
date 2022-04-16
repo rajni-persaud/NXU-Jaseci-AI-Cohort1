@@ -24,8 +24,6 @@ graph main_graph {
                         prompts = ["one page", "5-page", "custom", "back"]
                     );
 
-        website -[transition(intent="back")]-> main_root;
-
         mobile_app = spawn main_root -[transition(intent="mobile app")]-> node::state(
                         title = "Mobile App",
                         message = "Type of mobile app?",
@@ -44,7 +42,10 @@ graph main_graph {
         all_nodes = [main_root];
 
         main_root_nodes =[website, mobile_app, info_system];
-        for i in main_root_nodes: all_nodes.list::append(i);
+        for i in main_root_nodes {
+            all_nodes.list::append(i);
+            main_root <-[transition(intent="back")]- i;
+        }
 
         website_nodes =[];
         mobile_app_nodes =[];
