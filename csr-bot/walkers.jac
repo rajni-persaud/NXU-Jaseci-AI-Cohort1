@@ -42,6 +42,19 @@ walker talker{
         'custom'
     ];
 
+        yes_no_intents = [
+        "yes",
+        "yeah",
+        "of course",
+        "absolutely",
+        "I'd like that",
+        "negative",
+        "no",
+        "not",
+        "back",
+        "goodbye"
+    ];
+    
     default_intents = [
         "back",
         "goodbye"
