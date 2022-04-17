@@ -16,7 +16,7 @@ walker talker{
     website_intents = [
         "one page", 
         "5-page", 
-        "other", 
+        "custom", 
         "back",
         "goodbye"
     ];
@@ -24,7 +24,7 @@ walker talker{
     mobile_app_intents = [
         "game", 
         "social", 
-        "other", 
+        "custom", 
         "back",
         "goodbye"
     ];
@@ -38,6 +38,19 @@ walker talker{
         "back",
         "goodbye"
     ];
+
+    work_samples = {
+        'web_financial':'',
+        'web_marketing':'',
+        'web_hr':'',
+        'web_custom':'',
+        'mobile_social':'',
+        'mobile_game': '',
+        'mobile_custom': '',
+        'is_financial':'',
+        'is_hr':'',
+        'is_custom':''
+    };
 
     state {
 
