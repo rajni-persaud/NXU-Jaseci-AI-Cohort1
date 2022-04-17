@@ -42,6 +42,8 @@ graph main_graph {
                         prompts = ["back"]
                     );
 
+        our_work = spawn node::state(title="Our Work");        
+
         mobile_app = spawn main_root -[transition(intent="mobile app")]-> node::state(
                         title = "Mobile App",
                         message = "What kind of mobile app would you like?",
@@ -54,8 +56,7 @@ graph main_graph {
                         prompts = ["back"]
                     );
         
-        
-        bye_node = spawn node::state(title="Goodbye", message="I'm always happy to help. Stay safe!", prompts="");
+        bye_node = spawn node::state(title="Goodbye", message="I'm always happy to help. Stay safe!");
 
         all_nodes = [main_root];
 
