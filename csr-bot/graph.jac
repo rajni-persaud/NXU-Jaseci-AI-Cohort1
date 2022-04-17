@@ -42,12 +42,6 @@ graph main_graph {
                         prompts = ["back"]
                     );
 
-        // one_pager_users = spawn website -[transition(intent="one page")]-> node::state(
-        //                 title = "One Pager Website Details",
-        //                 message = "What would your one-page website be based on?",
-        //                 prompts = ["back"]
-        //             );
-
         mobile_app = spawn main_root -[transition(intent="mobile app")]-> node::state(
                         title = "Mobile App",
                         message = "What kind of mobile app would you like?",
