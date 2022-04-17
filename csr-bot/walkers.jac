@@ -45,6 +45,7 @@ walker talker{
         yes_no_intents = [
         "yes",
         "yeah",
+        "yes please",
         "of course",
         "absolutely",
         "I'd like that",
@@ -83,6 +84,7 @@ walker talker{
         if (here.title == "Mobile App"): current_intents = mobile_app_intents;
         if (here.title == "Information systems"): current_intents = info_system_intents;
         if (here.title == "Website Description"): current_intents = website_description_intents;
+        if (here.title == "Meeting Prompt"): current_intents = yes_no_intents;
 
         if(here.title == "Goodbye"){
             std.out(here.message);
@@ -112,6 +114,12 @@ walker talker{
 
         user_intent = current_intents[max_index];
 
+        if (here.title == "Meeting Prompt"){
+            if user_intent in ["yes", "yes please", "yeah", "of course", "absolutely", "I'd like that"]: user_intent = "yes";
+            if user_intent in ["negative", "no", "not"]: user_intent = "no";
+        }
+
+        std.out("here.title: ", here.title);
         std.out("Current intents to choose from: ", current_intents);
         std.out("Intent from user: ", user_intent);
 
