@@ -117,8 +117,10 @@ walker talker{
         if (here.title == "Meeting Prompt"){
             if user_intent in ["yes", "yes please", "yeah", "of course", "absolutely", "I'd like that"]: user_intent = "yes";
             if user_intent in ["negative", "no", "not"]: user_intent = "no";
+            if (user_intent != "no" or user_intent != "yes"): if utterance.str::lower == "yes": user_intent = "yes";
         }
 
+        std.out("utterance:", utterance);
         std.out("here.title: ", here.title);
         std.out("Current intents to choose from: ", current_intents);
         std.out("Intent from user: ", user_intent);
