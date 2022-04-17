@@ -71,7 +71,12 @@ graph main_graph {
             main_root <-[transition(intent="back")]- i;
         }
 
-        website_nodes =[];
+        website_nodes =[one_pager, five_pager, other_website];
+        for i in website_nodes {
+            all_nodes.list::append(i);
+            website <-[transition(intent="back")]- i;
+        }
+
         mobile_app_nodes =[];
         info_system_nodes = [];
 
