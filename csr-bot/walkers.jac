@@ -76,10 +76,11 @@ walker talker{
 
         user_intent = current_intents[max_index];
 
+        std.out("Current intents to choose from: ", current_intents);
+        std.out("Intent from user: ", user_intent);
+
         take -[transition(intent == user_intent)]-> node::state else {
             take here;
-        std.out(current_intents);
-        std.out(user_intent);
         }
     }
 }
