@@ -20,13 +20,37 @@ graph main_graph {
 
         website = spawn main_root -[transition(intent="website")]-> node::state(
                         title = "Website",
-                        message = "Type of website?",
+                        message = "What kind of website would you like?",
                         prompts = ["one page", "5-page", "custom", "back"]
                     );
 
+        one_pager = spawn website -[transition(intent="one page")]-> node::state(
+                        title = "One Pager Website Details",
+                        message = "What would your one-page website be based on?",
+                        prompts = ["back"]
+                    );
+
+        five_pager = spawn website -[transition(intent="5-page")]-> node::state(
+                        title = "Five Pager Website Details",
+                        message = "Who are you hoping to target with your 5-page website?",
+                        prompts = ["back"]
+                    );
+
+        other_website = spawn website -[transition(intent="other")]-> node::state(
+                        title = "Custom Website Details",
+                        message = "What features are you looking to include on your custom website?",
+                        prompts = ["back"]
+                    );
+
+        // one_pager_users = spawn website -[transition(intent="one page")]-> node::state(
+        //                 title = "One Pager Website Details",
+        //                 message = "What would your one-page website be based on?",
+        //                 prompts = ["back"]
+        //             );
+
         mobile_app = spawn main_root -[transition(intent="mobile app")]-> node::state(
                         title = "Mobile App",
-                        message = "Type of mobile app?",
+                        message = "What kind of mobile app would you like?",
                         prompts = ["game", "social", "custom", "back"]
                     );
 
