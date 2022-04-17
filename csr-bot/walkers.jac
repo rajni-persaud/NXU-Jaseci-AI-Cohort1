@@ -107,8 +107,10 @@ walker talker{
             take -[transition(intent=="")]-> node::state;
             std.out("Here's a sample of a",user_intent,"website built by us:",web_sample_link);
         }
-        take -[transition(intent == user_intent)]-> node::state else {
-            take here;
-        }
+        else{
+            take -[transition(intent == user_intent)]-> node::state else {
+                take here;
+            }
+        } 
     }
 }

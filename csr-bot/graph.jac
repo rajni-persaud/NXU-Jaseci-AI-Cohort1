@@ -70,10 +70,11 @@ graph main_graph {
         website_nodes =[one_pager, five_pager, other_website];  // This list contains all node connected to website node
         for i in website_nodes {
             all_nodes.list::append(i);      // added website nodes to all nodes list
-            website <-[transition(intent="back")]- i;   // created edge from each website_node back to website
+            website <-[transition(intent="back")]- i;   // create edge from each website_node back to website
+            i -[transition(intent="")]-> website_sample; // create edge that shows the user a sample choosing topic of website
         }
 
-        for i in website_nodes: i -[transition(intent="")]-> website_sample;
+        website <-[transition(intent="back")]- website_sample;
 
         mobile_app_nodes =[];   // This list contains all node connected to mobile_app node
         info_system_nodes = []; // This list contains all node connected to info_system node
