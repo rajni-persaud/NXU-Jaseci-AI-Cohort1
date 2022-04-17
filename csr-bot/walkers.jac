@@ -16,7 +16,7 @@ walker talker{
     website_intents = [
         "one page", 
         "5-page", 
-        "custom", 
+        "other", 
         "back",
         "goodbye"
     ];
@@ -24,7 +24,7 @@ walker talker{
     mobile_app_intents = [
         "game", 
         "social", 
-        "custom", 
+        "other", 
         "back",
         "goodbye"
     ];
@@ -34,7 +34,14 @@ walker talker{
         "goodbye"
     ];
 
+    default_intents = [
+        "back",
+        "goodbye"
+    ];
+
     state {
+
+        current_intents = default_intents;
 
         if (here.title == "Main"): current_intents = main_intents;
         if (here.title == "Website"): current_intents = website_intents;
