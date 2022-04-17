@@ -41,7 +41,10 @@ walker talker{
         if (here.title == "Mobile App"): current_intents = mobile_app_intents;
         if (here.title == "Information systems"): current_intents = info_system_intents;
 
-        if(here.title == "Goodbye"): disengage;
+        if(here.title == "Goodbye"){
+            std.out(here.message);
+            disengage;
+        }
 
         std.out(here.message);
 

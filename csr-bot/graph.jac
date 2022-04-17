@@ -37,7 +37,7 @@ graph main_graph {
                     );
         
         
-        bye_node = spawn node::state(title="Goodbye", message="I'm always happy to help :)", prompts="");
+        bye_node = spawn node::state(title="Goodbye", message="I'm always happy to help. Stay safe!", prompts="");
 
         all_nodes = [main_root];
 
