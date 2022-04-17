@@ -45,8 +45,16 @@ graph main_graph {
                         prompts = ["back"]
                     );
 
-        meeting_node = spawn node::state(title="Meeting Prompt", message="If you'd like, We'll be happy to set up a meeting with one of our developers.");        
+        meeting_node = spawn node::state(title="Meeting Prompt", message="If you'd like, We'll be happy to set up a meeting with one of our developers.");
 
+        email_node = spawn meeting_node -[transition(intent="yes")]-> node::state(
+                        title = "Email Prompt",
+                        message = "Please provide an email so that we can make contact with you. Alternatively, you can contact us at: operations@v75inc.com",
+                        prompts = ["back"]
+                    );
+        
+        meeting_node -[transition(intent="no")]-> main_root;
+        
         mobile_app = spawn main_root -[transition(intent="mobile app")]-> node::state(
                         title = "Mobile App",
                         message = "What kind of mobile app would you like?",
