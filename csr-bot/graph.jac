@@ -28,24 +28,24 @@ graph main_graph {
                     );      // created website node
 
         one_pager = spawn website -[transition(intent="one page")]-> node::state(
-                        title = "One Pager Website Details",
+                        title = "Website Description",
                         message = "What would your one-page website be based on?",
                         prompts = ["back"]
                     );
 
         five_pager = spawn website -[transition(intent="5-page")]-> node::state(
-                        title = "Five Pager Website Details",
+                        title = "Website Description",
                         message = "Who are you hoping to target with your 5-page website?",
                         prompts = ["back"]
                     );
 
         other_website = spawn website -[transition(intent="other")]-> node::state(
-                        title = "Custom Website Details",
+                        title = "Website Description",
                         message = "What features are you looking to include on your custom website?",
                         prompts = ["back"]
                     );
 
-        our_work = spawn node::state(title="Our Work");        
+        website_sample = spawn node::state(title="Website Sample", message="If you'd like, We'll be happy to set up a meeting with one of our developers.");        
 
         mobile_app = spawn main_root -[transition(intent="mobile app")]-> node::state(
                         title = "Mobile App",
@@ -72,6 +72,8 @@ graph main_graph {
             all_nodes.list::append(i);      // added website nodes to all nodes list
             website <-[transition(intent="back")]- i;   // created edge from each website_node back to website
         }
+
+        for i in website_nodes: i -[transition(intent="")]-> website_sample;
 
         mobile_app_nodes =[];   // This list contains all node connected to mobile_app node
         info_system_nodes = []; // This list contains all node connected to info_system node

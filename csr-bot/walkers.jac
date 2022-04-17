@@ -34,16 +34,25 @@ walker talker{
         "goodbye"
     ];
 
+    website_description_intents = [
+        'financial',
+        'hr',
+        'marketing',
+        'personal',
+        'custom'
+    ];
+
     default_intents = [
         "back",
         "goodbye"
     ];
 
     work_samples = {
-        'web_financial':'',
-        'web_marketing':'',
-        'web_hr':'',
-        'web_custom':'',
+        'web_financial':'https://v75inc.com/finance',
+        'web_hr':'https://v75inc.com/team',
+        'web_marketing':'https://v75inc.com/marketing',
+        'web_personal':'https://eldonmarks.com/',
+        'web_custom':'https://v75inc.com/',
         'mobile_social':'',
         'mobile_game': '',
         'mobile_custom': '',
@@ -60,6 +69,7 @@ walker talker{
         if (here.title == "Website"): current_intents = website_intents;
         if (here.title == "Mobile App"): current_intents = mobile_app_intents;
         if (here.title == "Information systems"): current_intents = info_system_intents;
+        if (here.title == "Website Description"): current_intents = website_description_intents;
 
         if(here.title == "Goodbye"){
             std.out(here.message);
@@ -92,6 +102,11 @@ walker talker{
         std.out("Current intents to choose from: ", current_intents);
         std.out("Intent from user: ", user_intent);
 
+        if(here.title == "Website Description"){
+            web_sample_link = work_samples['web_'+user_intent];
+            take -[transition(intent=="")]-> node::state;
+            std.out("Here's a sample of a",user_intent,"website built by us:",web_sample_link);
+        }
         take -[transition(intent == user_intent)]-> node::state else {
             take here;
         }
