@@ -24,6 +24,9 @@ graph main_graph {
         thank_you_node = spawn node::state(title="thank you", message="Thank you! What else can we help you with?");
         all_nodes.list::append(thank_you_node); // added thank_you node to all nodes list
 
+        payment_node = spawn node::state(title="payment", message="Please send an email to operations@v75inc.com requesting a quotation.");
+        all_nodes.list::append(payment_node); // added payment node to all nodes list
+
         website = spawn main_root -[transition(intent="website")]-> node::state(
                         title = "Website",
                         message = "What kind of website would you like?",
@@ -60,7 +63,7 @@ graph main_graph {
         meeting_node -[transition(intent="no")]-> thank_you_node;
         
         email_node --> thank_you_node;
-        all_nodes.list::append(email_node);
+        payment_node -[transition(intent="pay")]-> thank_you_node;
         
         mobile_app = spawn main_root -[transition(intent="mobile app")]-> node::state(
                         title = "Mobile App",
@@ -99,6 +102,7 @@ graph main_graph {
         mobile_app_nodes =[];   // This list contains all node connected to mobile_app node
         info_system_nodes = []; // This list contains all node connected to info_system node
 
+        for n in all_nodes: n -[transition(intent="payment")]-> payment_node;   // created edge from each node to payment node.
         for n in all_nodes: n -[transition(intent="goodbye")]-> bye_node;   // created edge from each node to bye_node, allowing the user to exit at any point
     }
 

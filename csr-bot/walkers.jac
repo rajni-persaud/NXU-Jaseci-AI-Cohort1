@@ -9,6 +9,7 @@ walker talker{
         "website",
         "mobile app",
         "information systems",
+        "payment",
         "back",
         "goodbye"
     ];
@@ -16,7 +17,8 @@ walker talker{
     website_intents = [
         "one page", 
         "5-page", 
-        "custom", 
+        "custom",
+        "payment",
         "back",
         "goodbye"
     ];
@@ -24,13 +26,15 @@ walker talker{
     mobile_app_intents = [
         "game", 
         "social", 
-        "custom", 
+        "custom",
+        "payment",
         "back",
         "goodbye"
     ];
 
     info_system_intents = [
         "back",
+        "payment",
         "goodbye"
     ];
 
@@ -58,6 +62,7 @@ walker talker{
     
     default_intents = [
         "back",
+        "payment",
         "goodbye"
     ];
 
@@ -79,7 +84,7 @@ walker talker{
 
         current_intents = default_intents;
 
-        if (here.title == "Main"||here.title == "thank you"): current_intents = main_intents;
+        if (here.title == "Main" || here.title == "thank you"): current_intents = main_intents;
         if (here.title == "Website"): current_intents = website_intents;
         if (here.title == "Mobile App"): current_intents = mobile_app_intents;
         if (here.title == "Information systems"): current_intents = info_system_intents;
@@ -93,9 +98,10 @@ walker talker{
 
         std.out(here.message);
 
-        utterance = std.input("> ");
+        if(here.title != "payment"): utterance = std.input("> ");
 
         if(here.title == "Email Prompt"): take --> node::state;
+        if(here.title == "payment"): take -[transition(intent == "pay")]-> node::state;
 
         q_enc = use.enc_question(utterance);
         a_enc = use.enc_answer(current_intents); # can take lists or single strings
@@ -127,7 +133,7 @@ walker talker{
         std.out("here.title: ", here.title);
         std.out("Current intents to choose from: ", current_intents);
         std.out("Intent from user: ", user_intent);
-
+        
         if(here.title == "Website Description"){
             web_sample_link = work_samples['web_'+user_intent];
             take -[transition(intent=="meeting")]-> node::state;
