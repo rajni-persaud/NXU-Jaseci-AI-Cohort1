@@ -79,6 +79,11 @@ graph main_graph {
             main_root <-[transition(intent="back")]- i; // created edge from each main_root node back to main root
         }
 
+        // connecting thank_you_node to main_root nodes, so that user can ask questions again
+        thank_you_node -[transition(intent="website")]-> main_root_nodes[0];
+        thank_you_node -[transition(intent="mobile app")]-> main_root_nodes[1];
+        thank_you_node -[transition(intent="information systems")]-> main_root_nodes[2];
+
         website_nodes =[one_pager, five_pager, other_website];  // This list contains all node connected to website node
         for i in website_nodes {
             all_nodes.list::append(i);      // added website nodes to all nodes list
