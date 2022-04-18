@@ -57,7 +57,7 @@ graph main_graph {
                         prompts = ["back"]
                     );
         
-        meeting_node -[transition(intent="no")]-> main_root;
+        meeting_node -[transition(intent="no")]-> thank_you_node;
         
         mobile_app = spawn main_root -[transition(intent="mobile app")]-> node::state(
                         title = "Mobile App",
