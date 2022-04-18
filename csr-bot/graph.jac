@@ -21,6 +21,10 @@ graph main_graph {
         
         all_nodes.list::append(main_root); // added main_root node to all nodes list
 
+        thank_you_node = spawn node::state(title="thank you", message="Thank you! What else can we help you with?");
+
+        all_nodes.list::append(thank_you_node); // added thank_you node to all nodes list
+
         website = spawn main_root -[transition(intent="website")]-> node::state(
                         title = "Website",
                         message = "What kind of website would you like?",
