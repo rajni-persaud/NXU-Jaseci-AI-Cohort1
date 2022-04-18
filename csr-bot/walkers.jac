@@ -100,7 +100,6 @@ walker talker{
 
         if(here.title != "payment"): utterance = std.input("> ");
 
-        if(here.title == "Email Prompt"): take --> node::state;
         if(here.title == "payment"): take -[transition(intent == "pay")]-> node::state;
 
         q_enc = use.enc_question(utterance);
@@ -138,6 +137,9 @@ walker talker{
             web_sample_link = work_samples['web_'+user_intent];
             take -[transition(intent=="meeting")]-> node::state;
             std.out("Here's a sample of a",user_intent,"website built by us:",web_sample_link);
+        }
+        elif(here.title == "Email Prompt"){
+            take -[transition(intent == "thank_you")]-> node::state;
         }
         else{
             take -[transition(intent == user_intent)]-> node::state else {
