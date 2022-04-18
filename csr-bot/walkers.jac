@@ -120,6 +120,7 @@ walker talker{
             if (user_intent != "no" or user_intent != "yes"): if utterance.str::lower == "yes": user_intent = "yes";
         }
 
+        std.out("message:", here.message);
         std.out("utterance:", utterance);
         std.out("here.title: ", here.title);
         std.out("Current intents to choose from: ", current_intents);
@@ -127,7 +128,7 @@ walker talker{
 
         if(here.title == "Website Description"){
             web_sample_link = work_samples['web_'+user_intent];
-            take -[transition(intent=="")]-> node::state;
+            take -[transition(intent=="meeting")]-> node::state;
             std.out("Here's a sample of a",user_intent,"website built by us:",web_sample_link);
         }
         else{

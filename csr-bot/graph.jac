@@ -22,7 +22,6 @@ graph main_graph {
         all_nodes.list::append(main_root); // added main_root node to all nodes list
 
         thank_you_node = spawn node::state(title="thank you", message="Thank you! What else can we help you with?");
-
         all_nodes.list::append(thank_you_node); // added thank_you node to all nodes list
 
         website = spawn main_root -[transition(intent="website")]-> node::state(
@@ -50,6 +49,7 @@ graph main_graph {
                     );
 
         meeting_node = spawn node::state(title="Meeting Prompt", message="If you'd like, We'll be happy to set up a meeting with one of our developers.");
+        all_nodes.list::append(meeting_node); // added meeting node to all nodes list
 
         email_node = spawn meeting_node -[transition(intent="yes")]-> node::state(
                         title = "Email Prompt",
@@ -88,7 +88,7 @@ graph main_graph {
         for i in website_nodes {
             all_nodes.list::append(i);      // added website nodes to all nodes list
             website <-[transition(intent="back")]- i;   // create edge from each website_node back to website
-            i -[transition(intent="")]-> meeting_node; // create edge that shows the user a sample choosing topic of website
+            i -[transition(intent="meeting")]-> meeting_node; // create edge to meeting node
         }
 
         website <-[transition(intent="back")]- meeting_node;
