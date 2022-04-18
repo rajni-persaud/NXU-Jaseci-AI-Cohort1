@@ -60,6 +60,8 @@ graph main_graph {
                         prompts = ["back"]
                     );
         
+        all_nodes.list::append(email_node); // added email node to all nodes list
+        
         meeting_node -[transition(intent="no")]-> thank_you_node;
         
         email_node --> thank_you_node;
