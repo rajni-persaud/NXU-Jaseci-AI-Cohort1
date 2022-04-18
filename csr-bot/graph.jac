@@ -64,7 +64,7 @@ graph main_graph {
         
         meeting_node -[transition(intent="no")]-> thank_you_node;
         
-        email_node --> thank_you_node;
+        email_node -[transition(intent="thank_you")]-> thank_you_node;
         payment_node -[transition(intent="pay")]-> thank_you_node;
         
         mobile_app = spawn main_root -[transition(intent="mobile app")]-> node::state(
