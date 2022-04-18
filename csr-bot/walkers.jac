@@ -95,6 +95,10 @@ walker talker{
 
         utterance = std.input("> ");
 
+        if(here.title == "Email Prompt"){
+            take --> node::state;
+        }
+
         q_enc = use.enc_question(utterance);
         a_enc = use.enc_answer(current_intents); # can take lists or single strings
 

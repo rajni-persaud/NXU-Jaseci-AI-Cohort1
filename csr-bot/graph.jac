@@ -58,6 +58,7 @@ graph main_graph {
                     );
         
         meeting_node -[transition(intent="no")]-> thank_you_node;
+        email_node --> thank_you_node;
         
         mobile_app = spawn main_root -[transition(intent="mobile app")]-> node::state(
                         title = "Mobile App",
