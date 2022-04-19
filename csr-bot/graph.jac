@@ -47,6 +47,12 @@ graph main_graph {
         email_node -[transition(intent="thank_you")]-> thank_you_node;
         payment_node -[transition(intent="pay")]-> thank_you_node;
 
+        about_us_node = spawn node::state(title="About us", message="This is the about node.");
+        all_nodes.list::append(about_us_node); // added about node to all nodes list
+
+        contact_node = spawn node::state(title="contact", message="This is the contact node.");
+        all_nodes.list::append(contact_node); // added contact node to all nodes list
+
         bye_node = spawn node::state(title="Goodbye", message="I'm always happy to help. Stay safe!");
         # ---------------------   GENERAL NODES  ----------------------------
 
