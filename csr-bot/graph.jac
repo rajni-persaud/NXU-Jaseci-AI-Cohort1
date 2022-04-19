@@ -92,7 +92,7 @@ graph main_graph {
         
         gaming = spawn mobile_app -[transition(intent="game")]-> node::state(
                         title = "Mobile Description",
-                        message = "Here's a sample of a game built by us:",
+                        message = "Here's a sample of a game built by us: https://v75inc.com/gaming",
                         prompts = ["back"]
                     );
 
