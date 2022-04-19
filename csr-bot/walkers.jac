@@ -125,11 +125,13 @@ walker talker{
             if (user_intent != "no" or user_intent != "yes"): if utterance.str::lower == "yes": user_intent = "yes";
         }
 
-        // std.out("message:", here.message);
-        // std.out("utterance:", utterance);
-        // std.out("here.title: ", here.title);
-        // std.out("Current intents to choose from: ", current_intents);
-        // std.out("Intent from user: ", user_intent);
+        std.out("-------------------------------------------------");
+        std.out("message:", here.message);
+        std.out("utterance:", utterance);
+        std.out("here.title: ", here.title);
+        std.out("Current intents to choose from: ", current_intents);
+        std.out("Intent from user: ", user_intent);
+        std.out("-------------------------------------------------");
         
         if(here.title == "Website Description"){
             web_sample_link = work_samples['web_'+user_intent];

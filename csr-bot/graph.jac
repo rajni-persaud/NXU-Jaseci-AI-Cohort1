@@ -13,6 +13,7 @@ graph main_graph {
 
     spawn{
         all_nodes = []; // This list will contain all nodes
+        # ---------------------   MAIN ROOT  -----------------------------
         main_root = spawn node::state(
                         title = "Main",
                         message = "Hi, How can I help you today?",
@@ -20,13 +21,36 @@ graph main_graph {
                     );          // created main root node
         
         all_nodes.list::append(main_root); // added main_root node to all nodes list
+        # ---------------------   MAIN ROOT  -----------------------------
 
+        # ---------------------   GENERAL NODES  -----------------------------
+        // These are nodes that the user will reach at some point, no matter which path they take.
         thank_you_node = spawn node::state(title="thank you", message="Thank you! What else can we help you with?");
         all_nodes.list::append(thank_you_node); // added thank_you node to all nodes list
 
         payment_node = spawn node::state(title="payment", message="Please send an email to operations@v75inc.com requesting a quotation.");
         all_nodes.list::append(payment_node); // added payment node to all nodes list
 
+        meeting_node = spawn node::state(title="Meeting Prompt", message="If you'd like, We'll be happy to set up a meeting with one of our developers.");
+        all_nodes.list::append(meeting_node); // added meeting node to all nodes list
+
+        email_node = spawn meeting_node -[transition(intent="yes")]-> node::state(
+                        title = "Email Prompt",
+                        message = "Please provide an email so that we can make contact with you. Alternatively, you can contact us at: operations@v75inc.com",
+                        prompts = ["back"]
+                    );
+        
+        all_nodes.list::append(email_node); // added email node to all nodes list
+        
+        meeting_node -[transition(intent="no")]-> thank_you_node;
+        
+        email_node -[transition(intent="thank_you")]-> thank_you_node;
+        payment_node -[transition(intent="pay")]-> thank_you_node;
+
+        bye_node = spawn node::state(title="Goodbye", message="I'm always happy to help. Stay safe!");
+        # ---------------------   GENERAL NODES  ----------------------------
+
+        # ---------------------   WEBSITE-RELATED NODES  ------------------------
         website = spawn main_root -[transition(intent="website")]-> node::state(
                         title = "Website",
                         message = "What kind of website would you like?",
@@ -50,36 +74,30 @@ graph main_graph {
                         message = "What features are you looking to include on your custom website?",
                         prompts = ["back"]
                     );
-
-        meeting_node = spawn node::state(title="Meeting Prompt", message="If you'd like, We'll be happy to set up a meeting with one of our developers.");
-        all_nodes.list::append(meeting_node); // added meeting node to all nodes list
-
-        email_node = spawn meeting_node -[transition(intent="yes")]-> node::state(
-                        title = "Email Prompt",
-                        message = "Please provide an email so that we can make contact with you. Alternatively, you can contact us at: operations@v75inc.com",
-                        prompts = ["back"]
-                    );
         
-        all_nodes.list::append(email_node); // added email node to all nodes list
+        website_nodes =[one_pager, five_pager, other_website];  // This list contains all node connected to website node
+        for i in website_nodes {
+            all_nodes.list::append(i);      // added website nodes to all nodes list
+            website <-[transition(intent="back")]- i;   // create edge from each website_node back to website
+            i -[transition(intent="meeting")]-> meeting_node; // create edge to meeting node
+        }
+        # ---------------------   WEBSITE-RELATED NODES  ------------------------
         
-        meeting_node -[transition(intent="no")]-> thank_you_node;
-        
-        email_node -[transition(intent="thank_you")]-> thank_you_node;
-        payment_node -[transition(intent="pay")]-> thank_you_node;
-        
+        # ---------------------   MOBILE APP-RELATED NODES  ------------------------
         mobile_app = spawn main_root -[transition(intent="mobile app")]-> node::state(
                         title = "Mobile App",
                         message = "What kind of mobile app would you like?",
                         prompts = ["game", "social", "custom", "back"]
                     );
+        # ---------------------   MOBILE APP-RELATED NODES  ------------------------
 
+        # ---------------------   INFO SYSTEM-RELATED NODES  ------------------------
         info_system = spawn main_root -[transition(intent="information systems")]-> node::state(
                         title = "Information systems",
                         message = "Tell me about the information system you'd like.",
                         prompts = ["back"]
                     );
-        
-        bye_node = spawn node::state(title="Goodbye", message="I'm always happy to help. Stay safe!");
+        # ---------------------   INFO SYSTEM-RELATED NODES  ------------------------
 
         main_root_nodes =[website, mobile_app, info_system]; // This list contains all node connected to main_root
         for i in main_root_nodes {
@@ -91,13 +109,6 @@ graph main_graph {
         thank_you_node -[transition(intent="website")]-> main_root_nodes[0];
         thank_you_node -[transition(intent="mobile app")]-> main_root_nodes[1];
         thank_you_node -[transition(intent="information systems")]-> main_root_nodes[2];
-
-        website_nodes =[one_pager, five_pager, other_website];  // This list contains all node connected to website node
-        for i in website_nodes {
-            all_nodes.list::append(i);      // added website nodes to all nodes list
-            website <-[transition(intent="back")]- i;   // create edge from each website_node back to website
-            i -[transition(intent="meeting")]-> meeting_node; // create edge to meeting node
-        }
 
         website <-[transition(intent="back")]- meeting_node;
 
