@@ -97,7 +97,7 @@ walker talker{
 
         std.out(here.message);
 
-        if(here.title not in ["Mobile Description", "payment"]): utterance = std.input("> ");
+        if(here.title not in ["Mobile Description", "IS Description", "payment"]): utterance = std.input("> ");
 
         q_enc = use.enc_question(utterance);
         a_enc = use.enc_answer(current_intents); # can take lists or single strings
@@ -138,6 +138,9 @@ walker talker{
             std.out("Here's a sample of a",user_intent,"website built by us:",web_sample_link);
         }
         elif(here.title == "Mobile Description"){
+            take -[transition(intent=="meeting")]-> node::state;
+        }
+        elif(here.title == "IS Description"){
             take -[transition(intent=="meeting")]-> node::state;
         }
         elif(here.title == "Email Prompt"): take -[transition(intent == "thank_you")]-> node::state;
