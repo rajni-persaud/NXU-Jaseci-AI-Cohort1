@@ -100,8 +100,6 @@ walker talker{
 
         if(here.title != "payment"): utterance = std.input("> ");
 
-        if(here.title == "payment"): take -[transition(intent == "pay")]-> node::state;
-
         q_enc = use.enc_question(utterance);
         a_enc = use.enc_answer(current_intents); # can take lists or single strings
 
@@ -127,11 +125,11 @@ walker talker{
             if (user_intent != "no" or user_intent != "yes"): if utterance.str::lower == "yes": user_intent = "yes";
         }
 
-        std.out("message:", here.message);
-        std.out("utterance:", utterance);
-        std.out("here.title: ", here.title);
-        std.out("Current intents to choose from: ", current_intents);
-        std.out("Intent from user: ", user_intent);
+        // std.out("message:", here.message);
+        // std.out("utterance:", utterance);
+        // std.out("here.title: ", here.title);
+        // std.out("Current intents to choose from: ", current_intents);
+        // std.out("Intent from user: ", user_intent);
         
         if(here.title == "Website Description"){
             web_sample_link = work_samples['web_'+user_intent];
@@ -139,6 +137,7 @@ walker talker{
             std.out("Here's a sample of a",user_intent,"website built by us:",web_sample_link);
         }
         elif(here.title == "Email Prompt"): take -[transition(intent == "thank_you")]-> node::state;
+        elif(here.title == "payment"): take -[transition(intent == "pay")]-> node::state;
         else{
             take -[transition(intent == user_intent)]-> node::state else {
                 take here;
