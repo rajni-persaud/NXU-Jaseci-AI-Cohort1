@@ -122,8 +122,44 @@ graph main_graph {
                         message = "Tell me about the information system you'd like.",
                         prompts = ["back"]
                     );
+        
+        educational_is = spawn info_system -[transition(intent="education")]-> node::state(
+                        title = "IS Description",
+                        message = "Here's a sample of a LMS built by us: https://v75inc.com/lms",
+                        prompts = ["back"]
+                    );
 
-        info_system_nodes = []; // This list contains all node connected to info_system node
+        hr_is = spawn info_system -[transition(intent="human resources")]-> node::state(
+                        title = "IS Description",
+                        message = "Here's a sample of a HRMS built by us: https://v75inc.com/hrms",
+                        prompts = ["back"]
+                    );
+
+        financial_is = spawn info_system -[transition(intent="financial")]-> node::state(
+                        title = "IS Description",
+                        message = "Here's a sample of a banking system built by us: https://v75inc.com/banking",
+                        prompts = ["back"]
+                    );
+
+        logistics_mis = spawn info_system -[transition(intent="logistics")]-> node::state(
+                        title = "IS Description",
+                        message = "Here's a sample of a logistics MIS system built by us: https://v75inc.com/logistics-mis",
+                        prompts = ["back"]
+                    );
+
+        custom_is = spawn info_system -[transition(intent="custom")]-> node::state(
+                        title = "IS Description",
+                        message = "Here's a sample of a custom information system built by us: https://v75inc.com/info-system",
+                        prompts = ["back"]
+                    );
+        
+        info_system_nodes = [educational_is, hr_is, financial_is, logistics_mis, custom_is]; // This list contains all node connected to info_system node
+        for i in info_system_nodes {
+            all_nodes.list::append(i);      // added info_system nodes to all nodes list
+            info_system <-[transition(intent="back")]- i;   // create edge from each info_system node back to info_system
+            i -[transition(intent="meeting")]-> meeting_node; // create edge to meeting node
+        }
+
         # ---------------------   INFO SYSTEM-RELATED NODES  ------------------------
 
         main_root_nodes =[website, mobile_app, info_system]; // This list contains all node connected to main_root
