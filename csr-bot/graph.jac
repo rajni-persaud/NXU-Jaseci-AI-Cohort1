@@ -89,6 +89,31 @@ graph main_graph {
                         message = "What kind of mobile app would you like?",
                         prompts = ["game", "social", "custom", "back"]
                     );
+        
+        gaming = spawn mobile_app -[transition(intent="game")]-> node::state(
+                        title = "Mobile Description",
+                        message = "Here's a sample of a game built by us:",
+                        prompts = ["back"]
+                    );
+
+        social = spawn mobile_app -[transition(intent="social")]-> node::state(
+                        title = "Mobile Description",
+                        message = "Here's a sample of a social app built by us: https://www.trueselph.com/",
+                        prompts = ["back"]
+                    );
+
+        other_mobile_app = spawn mobile_app -[transition(intent="custom")]-> node::state(
+                        title = "Mobile Description",
+                        message = "Here's a sample of a custom app built by us: https://www.zeroshotbot.com/",
+                        prompts = ["back"]
+                    );
+        
+        mobile_app_nodes =[gaming, social, other_mobile_app];   // This list contains all node connected to mobile_app node
+        for i in mobile_app_nodes {
+            all_nodes.list::append(i);      // added mobile nodes to all nodes list
+            mobile_app <-[transition(intent="back")]- i;   // create edge from each mobile_app_node back to mobile_app
+            i -[transition(intent="meeting")]-> meeting_node; // create edge to meeting node
+        }
         # ---------------------   MOBILE APP-RELATED NODES  ------------------------
 
         # ---------------------   INFO SYSTEM-RELATED NODES  ------------------------
@@ -97,6 +122,8 @@ graph main_graph {
                         message = "Tell me about the information system you'd like.",
                         prompts = ["back"]
                     );
+
+        info_system_nodes = []; // This list contains all node connected to info_system node
         # ---------------------   INFO SYSTEM-RELATED NODES  ------------------------
 
         main_root_nodes =[website, mobile_app, info_system]; // This list contains all node connected to main_root
@@ -111,9 +138,6 @@ graph main_graph {
         thank_you_node -[transition(intent="information systems")]-> main_root_nodes[2];
 
         website <-[transition(intent="back")]- meeting_node;
-
-        mobile_app_nodes =[];   // This list contains all node connected to mobile_app node
-        info_system_nodes = []; // This list contains all node connected to info_system node
 
         for n in all_nodes: n -[transition(intent="payment")]-> payment_node;   // created edge from each node to payment node.
         for n in all_nodes: n -[transition(intent="goodbye")]-> bye_node;   // created edge from each node to bye_node, allowing the user to exit at any point

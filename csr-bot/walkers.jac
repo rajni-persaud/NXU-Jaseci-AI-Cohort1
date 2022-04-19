@@ -71,13 +71,7 @@ walker talker{
         'web_hr':'https://v75inc.com/team',
         'web_marketing':'https://v75inc.com/marketing',
         'web_personal':'https://eldonmarks.com/',
-        'web_custom':'https://v75inc.com/',
-        'mobile_social':'',
-        'mobile_game': '',
-        'mobile_custom': '',
-        'is_financial':'',
-        'is_hr':'',
-        'is_custom':''
+        'web_custom':'https://v75inc.com/'
     };
 
     state {
@@ -98,7 +92,7 @@ walker talker{
 
         std.out(here.message);
 
-        if(here.title != "payment"): utterance = std.input("> ");
+        if(here.title not in ["Mobile Description", "payment"]): utterance = std.input("> ");
 
         q_enc = use.enc_question(utterance);
         a_enc = use.enc_answer(current_intents); # can take lists or single strings
@@ -137,6 +131,9 @@ walker talker{
             web_sample_link = work_samples['web_'+user_intent];
             take -[transition(intent=="meeting")]-> node::state;
             std.out("Here's a sample of a",user_intent,"website built by us:",web_sample_link);
+        }
+        elif(here.title == "Mobile Description"){
+            take -[transition(intent=="meeting")]-> node::state;
         }
         elif(here.title == "Email Prompt"): take -[transition(intent == "thank_you")]-> node::state;
         elif(here.title == "payment"): take -[transition(intent == "pay")]-> node::state;
