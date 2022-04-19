@@ -33,6 +33,11 @@ walker talker{
     ];
 
     info_system_intents = [
+        "education",
+        "human resources",
+        "financial",
+        "logistics",
+        "custom",
         "back",
         "payment",
         "goodbye"
