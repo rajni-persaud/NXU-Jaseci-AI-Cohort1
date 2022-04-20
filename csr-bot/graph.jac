@@ -1,5 +1,5 @@
 node state{
-    has name
+    has name;
     has title;
     has message;
 }
