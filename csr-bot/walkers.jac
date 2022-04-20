@@ -137,12 +137,8 @@ walker talker{
             take -[transition(intent=="meeting")]-> node::state;
             std.out("Here's a sample of a",user_intent,"website built by us:",web_sample_link);
         }
-        elif(here.title == "Mobile Description"){
-            take -[transition(intent=="meeting")]-> node::state;
-        }
-        elif(here.title == "IS Description"){
-            take -[transition(intent=="meeting")]-> node::state;
-        }
+        elif(here.title == "Mobile Description"): take -[transition(intent=="meeting")]-> node::state;
+        elif(here.title == "IS Description"): take -[transition(intent=="meeting")]-> node::state;
         elif(here.title == "Email Prompt"): take -[transition(intent == "thank_you")]-> node::state;
         elif(here.title == "payment"): take -[transition(intent == "pay")]-> node::state;
         else{
