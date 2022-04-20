@@ -75,7 +75,7 @@ graph main_graph {
                         message = "Who are you hoping to target with your 5-page website?"
                     );
 
-        other_website = spawn website -[transition(intent="other")]-> node::state(
+        other_website = spawn website -[transition(intent="custom")]-> node::state(
                         name = "other_website",
                         title = "Website Description",
                         message = "What features are you looking to include on your custom website?"

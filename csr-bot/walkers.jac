@@ -44,11 +44,12 @@ walker talker{
     ];
 
     website_description_intents = [
-        'financial',
-        'hr',
-        'marketing',
-        'personal',
-        'custom'
+        "financial",
+        "hr",
+        "marketing",
+        "personal",
+        "custom",
+        "back"
     ];
 
         yes_no_intents = [
@@ -132,7 +133,7 @@ walker talker{
         std.out("Intent from user: ", user_intent);
         std.out("-------------------------------------------------");
         
-        if(here.title == "Website Description"){
+        if(here.title == "Website Description" and user_intent != "back"){
             web_sample_link = work_samples['web_'+user_intent];
             take -[transition(intent=="meeting")]-> node::state;
             std.out("Here's a sample of a",user_intent,"website built by us:",web_sample_link);
