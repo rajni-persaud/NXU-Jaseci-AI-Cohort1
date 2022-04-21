@@ -183,7 +183,10 @@ graph main_graph {
             loop_node -[transition(intent="mobile app")]-> main_root_nodes[1];
             loop_node -[transition(intent="information systems")]-> main_root_nodes[2];
         }
-        
+
+        meeting_node <-[transition(intent="meeting_back")]- thank_you_node;  // create edge from thank you node back to meeting_node
+        email_node <-[transition(intent="email_back")]- thank_you_node;  // create edge from thank you node back to email_node
+
         for n in all_nodes: n -[transition(intent="about-us")]-> about_us_node;   // created edge from each node to about us node.
         for n in all_nodes: n -[transition(intent="contact-us")]-> contact_node;   // created edge from each node to contact node.
         for n in all_nodes: n -[transition(intent="payment")]-> payment_node;   // created edge from each node to payment node.

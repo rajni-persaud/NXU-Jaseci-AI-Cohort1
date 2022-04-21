@@ -2,7 +2,7 @@ walker talker{
     can use.enc_question, use.enc_answer;
 
     has utterance;
-    has prev_nodes = []; // This varible will store the previous node the walker has been on before take(-meetings)
+    has user_path = []; // This varible will store the previous node the walker has been on before take
 
     website_nodes_names =["one_pager", "five_pager", "other_website"];
     mobile_nodes_names = ["social", "gaming", "other_mobile_app"];
@@ -156,8 +156,9 @@ walker talker{
         std.out("Intent from user: ", user_intent);
         std.out("-------------------------------------------------");
          
-        if (here.name != "meeting"): prev_nodes.list::append(here.name);
-        std.out(prev_nodes);
+        user_path.list::append(here.name);
+        prev_nodes = [];
+        std.out(user_path);
         
         if(here.title == "Website Description" and user_intent != "back"){
             web_sample_link = work_samples['web_'+user_intent];
@@ -171,9 +172,13 @@ walker talker{
             else{
                 if (user_intent in about_intents): user_intent = "about-us";
                 if (user_intent in contact_intents): user_intent = "contact-us";
+                if (user_intent == "back" and here.name == "meeting"): for item in user_path: if (item != "meeting"): prev_nodes.list::append(item);
                 if (user_intent == "back" and here.name == "meeting" and prev_nodes[-1] in website_nodes_names): user_intent = prev_nodes[-1]+"_back";
                 if (user_intent == "back" and here.name == "meeting" and prev_nodes[-1] in mobile_nodes_names): user_intent = "mobile_app_back";
                 if (user_intent == "back" and here.name == "meeting" and prev_nodes[-1] in info_system_node_names): user_intent = "info_system_back";
+                if (user_intent == "back" and here.name == "thank_you"): for item in user_path: if (item != "thank_you"): prev_nodes.list::append(item);
+                if (user_intent == "back" and here.name == "thank_you" and prev_nodes[-1] in ["meeting", "email"]): user_intent = prev_nodes[-1]+"_back";
+                std.out(prev_nodes);
                 take -[transition(intent == user_intent)]-> node::state else: take here;
         } 
     }
