@@ -110,7 +110,7 @@ graph main_graph {
                     );
 
         other_mobile_app = spawn mobile_app -[transition(intent="custom")]-> node::state(
-                        name = "social",
+                        name = "other_mobile_app",
                         title = "Mobile Description",
                         message = "Here's a sample of a custom app built by us: https://www.zeroshotbot.com/"
                     );
