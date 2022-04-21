@@ -86,6 +86,7 @@ graph main_graph {
             all_nodes.list::append(i);      // added website nodes to all nodes list
             website <-[transition(intent="back")]- i;   // create edge from each website_node back to website
             i -[transition(intent="meeting")]-> meeting_node; // create edge to meeting node
+            i <-[transition(intent=i.name+"_back")]- meeting_node;  // create edge from meeting node to each of website_nodes
         }
         # ---------------------   WEBSITE-RELATED NODES  ------------------------
         
@@ -178,8 +179,6 @@ graph main_graph {
         thank_you_node -[transition(intent="website")]-> main_root_nodes[0];
         thank_you_node -[transition(intent="mobile app")]-> main_root_nodes[1];
         thank_you_node -[transition(intent="information systems")]-> main_root_nodes[2];
-
-        website <-[transition(intent="back")]- meeting_node;
 
         for n in all_nodes: n -[transition(intent="payment")]-> payment_node;   // created edge from each node to payment node.
         for n in all_nodes: n -[transition(intent="goodbye")]-> bye_node;   // created edge from each node to bye_node, allowing the user to exit at any point
