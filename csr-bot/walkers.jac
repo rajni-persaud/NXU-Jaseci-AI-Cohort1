@@ -5,6 +5,7 @@ walker talker{
     has prev_nodes = []; // This varible will store the previous node the walker has been on before take(-meetings)
 
     website_nodes_names =["one_pager", "five_pager", "other_website"];
+    mobile_nodes_names = ["social", "gaming", "other_mobile_app"];
     
     current_intents = [];
 
@@ -150,6 +151,7 @@ walker talker{
         elif(here.title == "payment"): take -[transition(intent == "pay")]-> node::state;
             else{
                 if (user_intent == "back" and here.name == "meeting" and prev_nodes[-1] in website_nodes_names): user_intent = prev_nodes[-1]+"_back";
+                if (user_intent == "back" and here.name == "meeting" and prev_nodes[-1] in mobile_nodes_names): user_intent = "mobile_app_back";
                 take -[transition(intent == user_intent)]-> node::state else {
                     take here;
             }

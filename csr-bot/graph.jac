@@ -121,6 +121,7 @@ graph main_graph {
             mobile_app <-[transition(intent="back")]- i;   // create edge from each mobile_app_node back to mobile_app
             i -[transition(intent="meeting")]-> meeting_node; // create edge to meeting node
         }
+        mobile_app <-[transition(intent="mobile_app_back")]- meeting_node;  // create edge from meeting node to mobile_app nodes
         # ---------------------   MOBILE APP-RELATED NODES  ------------------------
 
         # ---------------------   INFO SYSTEM-RELATED NODES  ------------------------
