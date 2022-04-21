@@ -2,6 +2,9 @@ walker talker{
     can use.enc_question, use.enc_answer;
 
     has utterance;
+    has prev_nodes = []; // This varible will store the previous node the walker has been on before take(-meetings)
+
+    website_nodes_names =["one_pager", "five_pager", "other_website"];
 
     current_intents = [];
 
@@ -129,9 +132,13 @@ walker talker{
         std.out("message:", here.message);
         std.out("utterance:", utterance);
         std.out("here.title: ", here.title);
+        std.out("here.name: ", here.name);
         std.out("Current intents to choose from: ", current_intents);
         std.out("Intent from user: ", user_intent);
         std.out("-------------------------------------------------");
+         
+        if (here.name != "meeting"): prev_nodes.list::append(here.name);
+        std.out(prev_nodes);
         
         if(here.title == "Website Description" and user_intent != "back"){
             web_sample_link = work_samples['web_'+user_intent];
