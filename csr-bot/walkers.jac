@@ -174,9 +174,7 @@ walker talker{
                 if (user_intent == "back" and here.name == "meeting" and prev_nodes[-1] in website_nodes_names): user_intent = prev_nodes[-1]+"_back";
                 if (user_intent == "back" and here.name == "meeting" and prev_nodes[-1] in mobile_nodes_names): user_intent = "mobile_app_back";
                 if (user_intent == "back" and here.name == "meeting" and prev_nodes[-1] in info_system_node_names): user_intent = "info_system_back";
-                take -[transition(intent == user_intent)]-> node::state else {
-                    take here;
-            }
+                take -[transition(intent == user_intent)]-> node::state else: take here;
         } 
     }
 }
