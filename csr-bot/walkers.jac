@@ -9,6 +9,8 @@ walker talker{
     info_system_node_names = ["educational_is", "hr_is", "financial_is", "logistics_mis", "custom_is"];
     
     current_intents = [];
+    about_intents = ["about", "what does v75 do", "what do you do"];
+    contact_intents = ["contact", "how can I contact v75", "where is v75 located", "where are you located", "telephone number"];
 
     main_intents = [
         "website",
@@ -86,6 +88,22 @@ walker talker{
     };
 
     state {
+        for a in about_intents{
+            main_intents.list::append(a);
+            website_intents.list::append(a);
+            mobile_app_intents.list::append(a);
+            info_system_intents.list::append(a); 
+            default_intents.list::append(a); 
+        }
+
+        for c in contact_intents{
+            main_intents.list::append(c);
+            website_intents.list::append(c);
+            mobile_app_intents.list::append(c);
+            info_system_intents.list::append(c); 
+            default_intents.list::append(c); 
+        }
+
         current_intents = default_intents;
 
         if (here.title == "Main" || here.title == "thank you"): current_intents = main_intents;
@@ -151,6 +169,8 @@ walker talker{
         elif(here.title == "Email Prompt"): take -[transition(intent == "thank_you")]-> node::state;
         elif(here.title == "payment"): take -[transition(intent == "pay")]-> node::state;
             else{
+                if (user_intent in about_intents): user_intent = "about-us";
+                if (user_intent in contact_intents): user_intent = "contact-us";
                 if (user_intent == "back" and here.name == "meeting" and prev_nodes[-1] in website_nodes_names): user_intent = prev_nodes[-1]+"_back";
                 if (user_intent == "back" and here.name == "meeting" and prev_nodes[-1] in mobile_nodes_names): user_intent = "mobile_app_back";
                 if (user_intent == "back" and here.name == "meeting" and prev_nodes[-1] in info_system_node_names): user_intent = "info_system_back";
