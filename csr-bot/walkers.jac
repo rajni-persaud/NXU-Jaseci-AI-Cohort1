@@ -106,7 +106,7 @@ walker talker{
 
         current_intents = default_intents;
 
-        if (here.title == "Main" || here.title == "thank you"): current_intents = main_intents;
+        if (here.title in ["Main", "thank you", "About us", "contact"]): current_intents = main_intents;
         if (here.title == "Website"): current_intents = website_intents;
         if (here.title == "Mobile App"): current_intents = mobile_app_intents;
         if (here.title == "Information systems"): current_intents = info_system_intents;

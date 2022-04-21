@@ -177,10 +177,16 @@ graph main_graph {
             main_root <-[transition(intent="back")]- i; // created edge from each main_root node back to main root
         }
 
-        // connecting thank_you_node to main_root nodes, so that user can ask questions again
+        // connecting thank_you_node, about_us_node and contact_node to main_root nodes, so that user can ask questions again
         thank_you_node -[transition(intent="website")]-> main_root_nodes[0];
         thank_you_node -[transition(intent="mobile app")]-> main_root_nodes[1];
         thank_you_node -[transition(intent="information systems")]-> main_root_nodes[2];
+        about_us_node -[transition(intent="website")]-> main_root_nodes[0];
+        about_us_node -[transition(intent="mobile app")]-> main_root_nodes[1];
+        about_us_node -[transition(intent="information systems")]-> main_root_nodes[2];
+        contact_node -[transition(intent="website")]-> main_root_nodes[0];
+        contact_node -[transition(intent="mobile app")]-> main_root_nodes[1];
+        contact_node -[transition(intent="information systems")]-> main_root_nodes[2];
 
         for n in all_nodes: n -[transition(intent="about-us")]-> about_us_node;   // created edge from each node to about us node.
         for n in all_nodes: n -[transition(intent="contact-us")]-> contact_node;   // created edge from each node to contact node.
