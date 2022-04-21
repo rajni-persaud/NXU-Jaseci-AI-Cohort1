@@ -178,16 +178,12 @@ graph main_graph {
         }
 
         // connecting thank_you_node, about_us_node and contact_node to main_root nodes, so that user can ask questions again
-        thank_you_node -[transition(intent="website")]-> main_root_nodes[0];
-        thank_you_node -[transition(intent="mobile app")]-> main_root_nodes[1];
-        thank_you_node -[transition(intent="information systems")]-> main_root_nodes[2];
-        about_us_node -[transition(intent="website")]-> main_root_nodes[0];
-        about_us_node -[transition(intent="mobile app")]-> main_root_nodes[1];
-        about_us_node -[transition(intent="information systems")]-> main_root_nodes[2];
-        contact_node -[transition(intent="website")]-> main_root_nodes[0];
-        contact_node -[transition(intent="mobile app")]-> main_root_nodes[1];
-        contact_node -[transition(intent="information systems")]-> main_root_nodes[2];
-
+        for loop_node in [thank_you_node, about_us_node, contact_node]{
+            loop_node -[transition(intent="website")]-> main_root_nodes[0];
+            loop_node -[transition(intent="mobile app")]-> main_root_nodes[1];
+            loop_node -[transition(intent="information systems")]-> main_root_nodes[2];
+        }
+        
         for n in all_nodes: n -[transition(intent="about-us")]-> about_us_node;   // created edge from each node to about us node.
         for n in all_nodes: n -[transition(intent="contact-us")]-> contact_node;   // created edge from each node to contact node.
         for n in all_nodes: n -[transition(intent="payment")]-> payment_node;   // created edge from each node to payment node.
