@@ -147,18 +147,18 @@ walker talker{
             if (user_intent != "no" or user_intent != "yes"): if utterance.str::lower == "yes": user_intent = "yes";
         }
 
-        std.out("-------------------------------------------------");
-        std.out("message:", here.message);
-        std.out("utterance:", utterance);
-        std.out("here.title: ", here.title);
-        std.out("here.name: ", here.name);
-        std.out("Current intents to choose from: ", current_intents);
-        std.out("Intent from user: ", user_intent);
-        std.out("-------------------------------------------------");
+        // std.out("-------------------------------------------------");
+        // std.out("message:", here.message);
+        // std.out("utterance:", utterance);
+        // std.out("here.title: ", here.title);
+        // std.out("here.name: ", here.name);
+        // std.out("Current intents to choose from: ", current_intents);
+        // std.out("Intent from user: ", user_intent);
+        // std.out("-------------------------------------------------");
          
         user_path.list::append(here.name);
         prev_nodes = [];
-        std.out(user_path);
+        // std.out(user_path);
         
         if(here.title == "Website Description" and user_intent != "back"){
             web_sample_link = work_samples['web_'+user_intent];
@@ -178,7 +178,7 @@ walker talker{
                 if (user_intent == "back" and here.name == "meeting" and prev_nodes[-1] in info_system_node_names): user_intent = "info_system_back";
                 if (user_intent == "back" and here.name == "thank_you"): for item in user_path: if (item != "thank_you"): prev_nodes.list::append(item);
                 if (user_intent == "back" and here.name == "thank_you" and prev_nodes[-1] in ["meeting", "email"]): user_intent = prev_nodes[-1]+"_back";
-                std.out(prev_nodes);
+                // std.out(prev_nodes);
                 take -[transition(intent == user_intent)]-> node::state else: take here;
         } 
     }
