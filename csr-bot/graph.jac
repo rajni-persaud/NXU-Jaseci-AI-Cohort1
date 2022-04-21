@@ -182,6 +182,8 @@ graph main_graph {
         thank_you_node -[transition(intent="mobile app")]-> main_root_nodes[1];
         thank_you_node -[transition(intent="information systems")]-> main_root_nodes[2];
 
+        for n in all_nodes: n -[transition(intent="about-us")]-> about_us_node;   // created edge from each node to about us node.
+        for n in all_nodes: n -[transition(intent="contact-us")]-> contact_node;   // created edge from each node to contact node.
         for n in all_nodes: n -[transition(intent="payment")]-> payment_node;   // created edge from each node to payment node.
         for n in all_nodes: n -[transition(intent="goodbye")]-> bye_node;   // created edge from each node to bye_node, allowing the user to exit at any point
     }
