@@ -167,6 +167,7 @@ graph main_graph {
             info_system <-[transition(intent="back")]- i;   // create edge from each info_system node back to info_system
             i -[transition(intent="meeting")]-> meeting_node; // create edge to meeting node
         }
+        info_system <-[transition(intent="info_system_back")]- meeting_node;  // create edge from meeting node to info_system nodes
 
         # ---------------------   INFO SYSTEM-RELATED NODES  ------------------------
 
