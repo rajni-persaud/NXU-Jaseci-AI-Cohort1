@@ -11,73 +11,13 @@ walker talker{
     current_intents = [];
     about_intents = ["about", "what does v75 do", "what do you do"];
     contact_intents = ["contact", "how can I contact v75", "where is v75 located", "where are you located", "telephone number"];
-
-    main_intents = [
-        "website",
-        "mobile app",
-        "information systems",
-        "payment",
-        "back",
-        "goodbye"
-    ];
-
-    website_intents = [
-        "one page", 
-        "5-page", 
-        "custom",
-        "payment",
-        "back",
-        "goodbye"
-    ];
-
-    mobile_app_intents = [
-        "game", 
-        "social", 
-        "custom",
-        "payment",
-        "back",
-        "goodbye"
-    ];
-
-    info_system_intents = [
-        "education",
-        "human resources",
-        "financial",
-        "logistics",
-        "custom",
-        "back",
-        "payment",
-        "goodbye"
-    ];
-
-    website_description_intents = [
-        "financial",
-        "hr",
-        "marketing",
-        "personal",
-        "custom",
-        "back"
-    ];
-
-        yes_no_intents = [
-        "yes",
-        "yeah",
-        "yes please",
-        "of course",
-        "absolutely",
-        "I'd like that",
-        "negative",
-        "no",
-        "not",
-        "back",
-        "goodbye"
-    ];
-    
-    default_intents = [
-        "back",
-        "payment",
-        "goodbye"
-    ];
+    main_intents = ["website", "mobile app", "information systems", "payment", "back", "goodbye"];
+    website_intents = ["one page", "5-page", "custom","payment", "back", "goodbye"];
+    mobile_app_intents = ["game", "social", "custom", "payment", "back", "goodbye"];
+    info_system_intents = ["education", "human resources", "financial", "logistics", "custom", "back", "payment", "goodbye"];
+    website_description_intents = ["financial", "hr", "marketing", "personal", "custom", "back"];
+    yes_no_intents = ["yes", "yeah", "yes please", "of course", "absolutely", "I'd like that", "negative", "no", "not", "back", "goodbye"];
+    default_intents = ["back", "payment", "goodbye"];
 
     work_samples = {
         'web_financial':'https://v75inc.com/finance',
