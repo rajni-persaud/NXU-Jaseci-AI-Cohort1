@@ -15,7 +15,7 @@ walker talker{
     website_intents = ["one page", "5-page", "custom","payment", "back", "goodbye"];
     mobile_app_intents = ["game", "social", "custom", "payment", "back", "goodbye"];
     info_system_intents = ["education", "human resources", "financial", "logistics", "custom", "back", "payment", "goodbye"];
-    website_description_intents = ["financial", "hr", "marketing", "personal", "custom", "back"];
+    website_description_intents = ["financial", "hr", "marketing", "personal", "custom", "meeting", "back"];
     yes_no_intents = ["yes", "yeah", "yes please", "of course", "absolutely", "I'd like that", "negative", "no", "not", "back", "goodbye"];
     default_intents = ["back", "payment", "goodbye"];
 
@@ -50,7 +50,7 @@ walker talker{
         if (here.title == "Website"): current_intents = website_intents;
         if (here.title == "Mobile App"): current_intents = mobile_app_intents;
         if (here.title == "Information systems"): current_intents = info_system_intents;
-        if (here.title == "Website Description"): current_intents = website_description_intents;
+        if (here.title in website_nodes_names): current_intents = website_description_intents;
         if (here.title == "Meeting Prompt"): current_intents = yes_no_intents;
 
         if(here.title == "Goodbye"){
@@ -60,7 +60,7 @@ walker talker{
 
         std.out(here.message);
 
-        if(here.title not in ["Mobile Description", "IS Description", "payment"]): utterance = std.input("> ");
+        if(here.title not in ["Website Description", "Mobile Description", "IS Description", "payment"]): utterance = std.input("> ");
 
         q_enc = use.enc_question(utterance);
         a_enc = use.enc_answer(current_intents); # can take lists or single strings
@@ -87,23 +87,23 @@ walker talker{
             if (user_intent != "no" or user_intent != "yes"): if utterance.str::lower == "yes": user_intent = "yes";
         }
 
-        // std.out("-------------------------------------------------");
-        // std.out("message:", here.message);
-        // std.out("utterance:", utterance);
-        // std.out("here.title: ", here.title);
-        // std.out("here.name: ", here.name);
-        // std.out("Current intents to choose from: ", current_intents);
-        // std.out("Intent from user: ", user_intent);
-        // std.out("-------------------------------------------------");
+        std.out("-------------------------------------------------");
+        std.out("message:", here.message);
+        std.out("utterance:", utterance);
+        std.out("here.title: ", here.title);
+        std.out("here.name: ", here.name);
+        std.out("Current intents to choose from: ", current_intents);
+        std.out("Intent from user: ", user_intent);
+        std.out("-------------------------------------------------");
          
         user_path.list::append(here.name);
         prev_nodes = [];
-        // std.out(user_path);
+        std.out(user_path);
         
-        if(here.title == "Website Description" and user_intent != "back"){
-            web_sample_link = work_samples['web_'+user_intent];
+        if(here.title == "Website Description"){
+            #web_sample_link = work_samples['web_'+user_intent];
             take -[transition(intent=="meeting")]-> node::state;
-            std.out("Here's a sample of a",user_intent,"website built by us:",web_sample_link);
+            #std.out("Here's a sample of a",user_intent,"website built by us:",web_sample_link);
         }
         elif(here.title == "Mobile Description"): take -[transition(intent=="meeting")]-> node::state;
         elif(here.title == "IS Description"): take -[transition(intent=="meeting")]-> node::state;
@@ -118,7 +118,7 @@ walker talker{
                 if (user_intent == "back" and here.name == "meeting" and prev_nodes[-1] in info_system_node_names): user_intent = "info_system_back";
                 if (user_intent == "back" and here.name == "thank_you"): for item in user_path: if (item != "thank_you"): prev_nodes.list::append(item);
                 if (user_intent == "back" and here.name == "thank_you" and prev_nodes[-1] in ["meeting", "email"]): user_intent = prev_nodes[-1]+"_back";
-                // std.out(prev_nodes);
+                std.out(prev_nodes);
                 take -[transition(intent == user_intent)]-> node::state else: take here;
         } 
     }
