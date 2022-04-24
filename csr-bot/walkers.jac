@@ -3,6 +3,7 @@ walker talker{
 
     has utterance;
     has user_path = []; // This varible will store the previous node the walker has been on before take
+    has intent_path = [];
 
     website_nodes_names =["one_pager", "five_pager", "other_website"];
     mobile_nodes_names = ["social", "gaming", "other_mobile_app"];
@@ -16,7 +17,7 @@ walker talker{
     mobile_app_intents = ["game", "social", "custom", "payment", "back", "goodbye"];
     info_system_intents = ["education", "human resources", "financial", "logistics", "custom", "back", "payment", "goodbye"];
     website_description_intents = ["financial", "hr", "marketing", "personal", "custom", "back"];
-    yes_no_intents = ["yes", "yeah", "yes please", "of course", "absolutely", "I'd like that", "negative", "no", "not", "back", "goodbye"];
+    yes_no_intents = ["yes", "yeah", "yes please", "of course", "absolutely", "I'd like that", "negative", "no", "not", "back"];
     default_intents = ["back", "payment", "goodbye"];
 
     state {
@@ -89,22 +90,34 @@ walker talker{
         std.out("-------------------------------------------------");
          
         user_path.list::append(here.name);
-        prev_nodes = [];
         std.out(user_path);
+        std.out(user_path.length);
+        intent_path.list::append(user_intent);
+        std.out(intent_path);
+        std.out(intent_path.length);
+        prev_nodes = [];
         
         if(here.title in ["Website Description", "Mobile Description", "IS Description"]): take -[transition(intent=="meeting")]-> node::state;
-        elif(here.title == "Email Prompt"): take -[transition(intent == "thank_you")]-> node::state;
+        elif(here.title == "Email Prompt" and user_intent != "back"): take -[transition(intent == "thank_you")]-> node::state;
         elif(here.title == "payment"): take -[transition(intent == "pay")]-> node::state;
             else{
                 if (user_intent in about_intents): user_intent = "about-us";
                 if (user_intent in contact_intents): user_intent = "contact-us";
-                if (user_intent == "back" and here.name == "meeting"): for item in user_path: if (item != "meeting"): prev_nodes.list::append(item);
-                if (user_intent == "back" and here.name == "meeting" and prev_nodes[-1] in website_nodes_names): user_intent = prev_nodes[-1]+"_back";
-                if (user_intent == "back" and here.name == "meeting" and prev_nodes[-1] in mobile_nodes_names): user_intent = "mobile_app_back";
-                if (user_intent == "back" and here.name == "meeting" and prev_nodes[-1] in info_system_node_names): user_intent = "info_system_back";
-                if (user_intent == "back" and here.name == "thank_you"): for item in user_path: if (item != "thank_you"): prev_nodes.list::append(item);
-                if (user_intent == "back" and here.name == "thank_you" and prev_nodes[-1] in ["meeting", "email"]): user_intent = prev_nodes[-1]+"_back";
-                std.out(prev_nodes);
+                count_b = 2;
+                back_num = 0;
+                ind = 0;
+                back_index = 1;
+                std.out("user_path_count_b", user_path[user_path.length-count_b]);
+                if(user_path[user_path.length-count_b] in ["web_financial", "web_hr", "web_marketing", "web_personal", "web_custom", "meeting"]): count_b = count_b + 1;
+                while(intent_path[intent_path.length-back_index] == "back"){
+                    back_num = back_num + 1;
+                    back_index = back_index + 1;
+                }
+                std.out("back_num : ", back_num);
+                std.out("count_b : ", count_b);
+                if back_num > 1: count_b = count_b + back_num;
+                if back_num > 2: count_b = count_b + back_num - 1;
+                if (user_intent == "back"): user_intent = "back_"+user_path[user_path.length-count_b];
                 take -[transition(intent == user_intent)]-> node::state else: take here;
         } 
     }

@@ -101,9 +101,9 @@ graph main_graph {
 
         for i in website_nodes {
             all_nodes.list::append(i);      // added website nodes to all nodes list
-            website <-[transition(intent="back")]- i;   // create edge from each website_node back to website
+            # website <-[transition(intent="back")]- i;   // create edge from each website_node back to website
             i -[transition(intent="meeting")]-> meeting_node; // create edge to meeting node
-            i <-[transition(intent=i.name+"_back")]- meeting_node;  // create edge from meeting node to each of website_nodes
+            # i <-[transition(intent=i.name+"_back")]- meeting_node;  // create edge from meeting node to each of website_nodes
         }
         # ---------------------   WEBSITE-RELATED NODES  ------------------------
         
@@ -135,10 +135,10 @@ graph main_graph {
         mobile_app_nodes =[gaming, social, other_mobile_app];   // This list contains all node connected to mobile_app node
         for i in mobile_app_nodes {
             all_nodes.list::append(i);      // added mobile nodes to all nodes list
-            mobile_app <-[transition(intent="back")]- i;   // create edge from each mobile_app_node back to mobile_app
+            # mobile_app <-[transition(intent="back")]- i;   // create edge from each mobile_app_node back to mobile_app
             i -[transition(intent="meeting")]-> meeting_node; // create edge to meeting node
         }
-        mobile_app <-[transition(intent="mobile_app_back")]- meeting_node;  // create edge from meeting node to mobile_app nodes
+        # mobile_app <-[transition(intent="mobile_app_back")]- meeting_node;  // create edge from meeting node to mobile_app nodes
         # ---------------------   MOBILE APP-RELATED NODES  ------------------------
 
         # ---------------------   INFO SYSTEM-RELATED NODES  ------------------------
@@ -181,17 +181,17 @@ graph main_graph {
         info_system_nodes = [educational_is, hr_is, financial_is, logistics_mis, custom_is]; // This list contains all node connected to info_system node
         for i in info_system_nodes {
             all_nodes.list::append(i);      // added info_system nodes to all nodes list
-            info_system <-[transition(intent="back")]- i;   // create edge from each info_system node back to info_system
+            #info_system <-[transition(intent="back")]- i;   // create edge from each info_system node back to info_system
             i -[transition(intent="meeting")]-> meeting_node; // create edge to meeting node
         }
-        info_system <-[transition(intent="info_system_back")]- meeting_node;  // create edge from meeting node to info_system nodes
+        #info_system <-[transition(intent="info_system_back")]- meeting_node;  // create edge from meeting node to info_system nodes
 
         # ---------------------   INFO SYSTEM-RELATED NODES  ------------------------
 
         main_root_nodes =[website, mobile_app, info_system]; // This list contains all node connected to main_root
         for i in main_root_nodes {
             all_nodes.list::append(i); // added main_root nodes to all nodes list
-            main_root <-[transition(intent="back")]- i; // created edge from each main_root node back to main root
+            # main_root <-[transition(intent="back")]- i; // created edge from each main_root node back to main root
         }
 
         // connecting thank_you_node, about_us_node and contact_node to main_root nodes, so that user can ask questions again
@@ -201,13 +201,20 @@ graph main_graph {
             loop_node -[transition(intent="information systems")]-> main_root_nodes[2];
         }
 
-        meeting_node <-[transition(intent="meeting_back")]- thank_you_node;  // create edge from thank you node back to meeting_node
-        email_node <-[transition(intent="email_back")]- thank_you_node;  // create edge from thank you node back to email_node
+        # meeting_node <-[transition(intent="meeting_back")]- thank_you_node;  // create edge from thank you node back to meeting_node
+        # email_node <-[transition(intent="email_back")]- thank_you_node;  // create edge from thank you node back to email_node
 
         for n in all_nodes: n -[transition(intent="about-us")]-> about_us_node;   // created edge from each node to about us node.
         for n in all_nodes: n -[transition(intent="contact-us")]-> contact_node;   // created edge from each node to contact node.
         for n in all_nodes: n -[transition(intent="payment")]-> payment_node;   // created edge from each node to payment node.
         for n in all_nodes: n -[transition(intent="goodbye")]-> bye_node;   // created edge from each node to bye_node, allowing the user to exit at any point
-    }
 
+        for f in all_nodes{
+            for t in all_nodes{
+                if (f != t or f != bye_node){
+                    t <-[transition (intent="back_"+t.name)]-f;
+                }
+            }
+        }
+    }
 }
