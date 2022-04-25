@@ -11,41 +11,28 @@ walker talker{
     
     current_intents = [];
     about_intents = ["about", "what does v75 do", "what do you do"];
+    for a in about_intents: current_intents.list::append(a);
     contact_intents = ["contact", "how can I contact v75", "where is v75 located", "where are you located", "telephone number"];
-    main_intents = ["website", "mobile app", "information systems", "payment", "back", "goodbye"];
-    website_intents = ["one page", "5-page", "custom","payment", "back", "goodbye"];
-    mobile_app_intents = ["game", "social", "custom", "payment", "back", "goodbye"];
-    info_system_intents = ["education", "human resources", "financial", "logistics", "custom", "back", "payment", "goodbye"];
-    website_description_intents = ["financial", "hr", "marketing", "personal", "custom", "back"];
-    yes_no_intents = ["yes", "yeah", "yes please", "of course", "absolutely", "I'd like that", "negative", "no", "not", "back"];
-    default_intents = ["back", "payment", "goodbye"];
+    for a in contact_intents: current_intents.list::append(a);
+    main_intents = ["website", "mobile app", "information systems", "back", "goodbye"];
+    for a in main_intents: current_intents.list::append(a);
+    website_intents = ["one page", "5-page", "custom"];
+    for a in website_intents: current_intents.list::append(a);
+    mobile_app_intents = ["game", "social", "custom"];
+    for a in mobile_app_intents: current_intents.list::append(a);
+    info_system_intents = ["education", "human resources", "financial", "logistics", "custom"];
+    for a in info_system_intents: current_intents.list::append(a);
+    website_description_intents = ["financial", "hr", "marketing", "personal", "custom"];
+    for a in website_description_intents: current_intents.list::append(a);
+    yes_no_intents = ["yes", "yeah", "yes please", "of course", "absolutely", "I'd like that", "negative", "no", "not"];
+    for a in yes_no_intents: current_intents.list::append(a);
+    payment_intents = ["how much will it cost", "what is the price", "how much do I owe you", "how much money should I pay for this"];
+    for a in payment_intents: current_intents.list::append(a);
+
+    intents_list = ["website", "mobile app", "information systems", "one page", "5-page", "game", "social"];
+    node_name_list = ["website", "mobile_app", "info_system", "one_pager", "five_pager", "gaming", "social"];
 
     state {
-        for a in about_intents{
-            main_intents.list::append(a);
-            website_intents.list::append(a);
-            mobile_app_intents.list::append(a);
-            info_system_intents.list::append(a); 
-            default_intents.list::append(a); 
-        }
-
-        for c in contact_intents{
-            main_intents.list::append(c);
-            website_intents.list::append(c);
-            mobile_app_intents.list::append(c);
-            info_system_intents.list::append(c); 
-            default_intents.list::append(c); 
-        }
-
-        current_intents = default_intents;
-
-        if (here.title in ["Main", "thank you", "About us", "contact"]): current_intents = main_intents;
-        if (here.title == "Website"): current_intents = website_intents;
-        if (here.title == "Mobile App"): current_intents = mobile_app_intents;
-        if (here.title == "Information systems"): current_intents = info_system_intents;
-        if (here.title in website_nodes_names): current_intents = website_description_intents;
-        if (here.title == "Meeting Prompt"): current_intents = yes_no_intents;
-
         if(here.title == "Goodbye"){
             std.out(here.message);
             disengage;
@@ -96,16 +83,22 @@ walker talker{
         std.out(intent_path);
         std.out(intent_path.length);
         prev_nodes = [];
+
+        if user_intent in intents_list{
+            user_intent_index = intents_list.list::index(user_intent);
+            user_intent = node_name_list[user_intent_index];
+        }
         
         if(here.title in ["Website Description", "Mobile Description", "IS Description"]): take -[transition(intent=="meeting")]-> node::state;
         elif(here.title == "Email Prompt" and user_intent != "back"): take -[transition(intent == "thank_you")]-> node::state;
         elif(here.title == "payment"): take -[transition(intent == "pay")]-> node::state;
             else{
-                if (user_intent in about_intents): user_intent = "about-us";
-                if (user_intent in contact_intents): user_intent = "contact-us";
+                if (user_intent in about_intents): user_intent = "about_us";
+                if (user_intent in contact_intents): user_intent = "contact_us";
+                if (user_intent in payment_intents): user_intent = "payment";
                 count_b = 2;
                 back_num = 0;
-                ind = 0;
+                # ind = 0;
                 back_index = 1;
                 std.out("user_path_count_b", user_path[user_path.length-count_b]);
                 if(user_path[user_path.length-count_b] in ["web_financial", "web_hr", "web_marketing", "web_personal", "web_custom", "meeting"]): count_b = count_b + 1;
@@ -117,6 +110,8 @@ walker talker{
                 std.out("count_b : ", count_b);
                 if back_num > 1: count_b = count_b + back_num;
                 if back_num > 2: count_b = count_b + back_num - 1;
+                if (user_intent not in ["back", "goodbye", "yes", "no"]): user_intent = "from_"+here.name+"_to_"+user_intent;
+                std.out(user_intent);
                 if (user_intent == "back"): user_intent = "back_"+user_path[user_path.length-count_b];
                 take -[transition(intent == user_intent)]-> node::state else: take here;
         } 

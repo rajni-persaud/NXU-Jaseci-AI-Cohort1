@@ -213,6 +213,7 @@ graph main_graph {
             for t in all_nodes{
                 if (f != t or f != bye_node){
                     t <-[transition (intent="back_"+t.name)]-f;
+                    f-[transition (intent="from_"+f.name+"_to_"+t.name)]-> t;
                 }
             }
         }
