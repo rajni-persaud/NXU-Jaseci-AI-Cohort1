@@ -28,6 +28,8 @@ walker talker{
     for a in yes_no_intents: current_intents.list::append(a);
     payment_intents = ["how much will it cost", "what is the price", "how much do I owe you", "how much money should I pay for this"];
     for a in payment_intents: current_intents.list::append(a);
+    personal_intents = ["about me", "my life", "family"];
+    for a in personal_intents: current_intents.list::append(a);
 
     intents_list = ["website", "mobile app", "information systems", "one page", "5-page", "game", "social"];
     node_name_list = ["website", "mobile_app", "info_system", "one_pager", "five_pager", "gaming", "social"];
@@ -84,12 +86,17 @@ walker talker{
         std.out(intent_path.length);
         prev_nodes = [];
 
+        if here.title in ["Website", "one_pager", "five_pager", "other_website"] and user_intent in personal_intents: user_intent = "personal";
+        if here.title in ["Website", "one_pager", "five_pager", "other_website"] and user_intent in website_description_intents{
+            if user_intent in ["financial", "marketing", "personal", "custom"]: user_intent = "web_"+user_intent;
+            if user_intent in ["hr", "human resources"]: user_intent = "web_hr";
+        }
         if user_intent in intents_list{
             user_intent_index = intents_list.list::index(user_intent);
             user_intent = node_name_list[user_intent_index];
         }
-        
-        if(here.title in ["Website Description", "Mobile Description", "IS Description"]): take -[transition(intent=="meeting")]-> node::state;
+
+        if(here.title in ["Website Description", "Mobile Description", "IS Description"]): take -[transition(intent=="from_"+here.name+"_to_meeting")]-> node::state;
         elif(here.title == "Email Prompt" and user_intent != "back"): take -[transition(intent == "thank_you")]-> node::state;
         elif(here.title == "payment"): take -[transition(intent == "pay")]-> node::state;
             else{

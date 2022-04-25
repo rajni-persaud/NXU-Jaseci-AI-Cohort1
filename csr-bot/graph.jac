@@ -57,25 +57,13 @@ graph main_graph {
         # ---------------------   GENERAL NODES  ----------------------------
 
         # ---------------------   WEBSITE-RELATED NODES  ------------------------
-        website = spawn main_root -[transition(intent="website")]-> node::state(
-                        name = "website",
-                        title = "Website",
-                        message = "What kind of website would you like?"
-                    );      // created website node
+        website = spawn node::state(name = "website", title = "Website", message = "What kind of website would you like?");      // created website node
 
-        one_pager = spawn website -[transition(intent="one page")]-> node::state(
-                        name = "one_pager",
-                        title = "one_pager",
-                        message = "What would your one-page website be based on?"
-                    );
+        one_pager = spawn node::state(name = "one_pager",title = "one_pager", message = "What would your one-page website be based on?");
 
-        five_pager = spawn website -[transition(intent="5-page")]-> node::state(
-                        name = "five_pager",
-                        title = "five_pager",
-                        message = "Who are you hoping to target with your 5-page website?"
-                    );
+        five_pager = spawn website -[transition(intent="5-page")]-> node::state(name = "five_pager", title = "five_pager", message = "Who are you hoping to target with your 5-page website?");
 
-        other_website = spawn website -[transition(intent="custom")]-> node::state(
+        other_website = spawn node::state(
                         name = "other_website",
                         title = "other_website",
                         message = "What features are you looking to include on your custom website?"
@@ -108,45 +96,20 @@ graph main_graph {
         # ---------------------   WEBSITE-RELATED NODES  ------------------------
         
         # ---------------------   MOBILE APP-RELATED NODES  ------------------------
-        mobile_app = spawn main_root -[transition(intent="mobile app")]-> node::state(
-                        name = "mobile_app",
-                        title = "Mobile App",
-                        message = "What kind of mobile app would you like?"
-                    );
+        mobile_app = spawn main_root -[transition(intent="mobile app")]-> node::state(name = "mobile_app", title = "Mobile App", message = "What kind of mobile app would you like?");
         
-        gaming = spawn mobile_app -[transition(intent="game")]-> node::state(
-                        name = "gaming",
-                        title = "Mobile Description",
-                        message = "Here's a sample of a game built by us: https://v75inc.com/gaming"
-                    );
+        gaming = spawn node::state(name = "gaming", title = "Mobile Description", message = "Here's a sample of a game built by us: https://v75inc.com/gaming");
 
-        social = spawn mobile_app -[transition(intent="social")]-> node::state(
-                        name = "social",
-                        title = "Mobile Description",
-                        message = "Here's a sample of a social app built by us: https://www.trueselph.com/"
-                    );
+        social = spawn node::state(name = "social", title = "Mobile Description", message = "Here's a sample of a social app built by us: https://www.trueselph.com/");
 
-        other_mobile_app = spawn mobile_app -[transition(intent="custom")]-> node::state(
-                        name = "other_mobile_app",
-                        title = "Mobile Description",
-                        message = "Here's a sample of a custom app built by us: https://www.zeroshotbot.com/"
-                    );
+        other_mobile_app = spawn node::state(name = "other_mobile_app", title = "Mobile Description", message = "Here's a sample of a custom app built by us: https://www.zeroshotbot.com/");
         
         mobile_app_nodes =[gaming, social, other_mobile_app];   // This list contains all node connected to mobile_app node
-        for i in mobile_app_nodes {
-            all_nodes.list::append(i);      // added mobile nodes to all nodes list
-            # mobile_app <-[transition(intent="back")]- i;   // create edge from each mobile_app_node back to mobile_app
-            i -[transition(intent="meeting")]-> meeting_node; // create edge to meeting node
-        }
-        # mobile_app <-[transition(intent="mobile_app_back")]- meeting_node;  // create edge from meeting node to mobile_app nodes
+        for i in mobile_app_nodes: all_nodes.list::append(i);      // added mobile nodes to all nodes list
         # ---------------------   MOBILE APP-RELATED NODES  ------------------------
 
         # ---------------------   INFO SYSTEM-RELATED NODES  ------------------------
-        info_system = spawn main_root -[transition(intent="information systems")]-> node::state(
-                        name = "info_system",
-                        title = "Information systems",
-                        message = "Tell me about the information system you'd like."
-                    );
+        info_system = spawn node::state(name = "info_system", title = "Information systems", message = "Tell me about the information system you'd like.");
         
         educational_is = spawn info_system -[transition(intent="education")]-> node::state(
                         name = "educational_is",
