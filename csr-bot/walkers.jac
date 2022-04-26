@@ -80,8 +80,36 @@ walker talker{
             mini = "";
         }
     }
-    // std.out(mini_utterance);
+    if u_word[-1] not in mini_utterance[-1]: mini_utterance.list::append(u_word[-1]);
+    std.out(mini_utterance);
     # ---------------------  Breaking up utterance  ------------------------
+    # ---------------------  Using USE to find the intent of mini_utterrance  ------------------------
+    mni_intents = [];
+    for u in mini_utterance{
+        mini_q_enc = use.enc_question(u);
+        mini_a_enc = use.enc_answer(current_intents); # can take lists or single strings
+
+        mini_a_scores=[];
+
+        mini_max_score = 0;
+
+        for i in mini_a_enc:
+            mini_a_scores.l::append(vector.cosine_sim(mini_q_enc, i));
+
+        for i in mini_a_scores {
+            if i > mini_max_score: 
+                mini_max_score = i;
+        }
+
+        mini_max_index = mini_a_scores.list::index(mini_max_score);
+
+        mini_user_intent = current_intents[mini_max_index];
+
+        mni_intents.list::append(mini_user_intent);
+    }
+    std.out(mni_intents);
+    # ---------------------  Using USE to find the intent of mini_utterrance  ------------------------
+
 
         if (here.title == "Meeting Prompt"){
             if user_intent in ["yes", "yes please", "yeah", "of course", "absolutely", "I'd like that"]: user_intent = "yes";
