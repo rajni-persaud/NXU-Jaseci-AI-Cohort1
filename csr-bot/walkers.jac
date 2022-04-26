@@ -84,7 +84,6 @@ walker talker{
         intent_path.list::append(user_intent);
         std.out(intent_path);
         std.out(intent_path.length);
-        prev_nodes = [];
 
         # ---------------------  Handling only 1 intent  ------------------------
         if here.title in ["Website", "one_pager", "five_pager", "other_website"] and user_intent in personal_intents: user_intent = "personal";
