@@ -70,6 +70,8 @@ walker talker{
      mini_utterance = [];
      mini = "";
      num = 1;
+     if u_word.length < 3: mini_utterance.list::append(utterance);
+     else:
      for i in u_word {
         mini = mini + " " + i;
         num = num + 1;
