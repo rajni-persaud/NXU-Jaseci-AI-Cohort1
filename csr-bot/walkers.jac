@@ -18,7 +18,7 @@ walker talker{
     for a in main_intents: current_intents.list::append(a);
     website_intents = ["one page", "5-page", "custom"];
     for a in website_intents: current_intents.list::append(a);
-    mobile_app_intents = ["game", "social", "custom"];
+    mobile_app_intents = ["social", "game", "custom"];
     for a in mobile_app_intents: current_intents.list::append(a);
     info_system_intents = ["education", "human resources", "financial", "logistics", "custom"];
     for a in info_system_intents: current_intents.list::append(a);
@@ -107,10 +107,22 @@ walker talker{
 
         mni_intents.list::append(mini_user_intent);
     }
-    std.out(mni_intents);
+    // std.out(mni_intents);
     # ---------------------  Using USE to find the intent of mini_utterrance  ------------------------
-
-
+    # ---------------------  Handling multiple intents  ------------------------
+        if user_intent == "website": 
+            for i=0 to i < (website_intents).length by i += 1: 
+                if website_intents[i] in mni_intents: user_intent = website_nodes_names[i];
+            for i=0 to i < (website_description_intents).length by i += 1: 
+                if website_description_intents[i] in mni_intents: user_intent = "web_"+website_description_intents[i];
+        elif user_intent == "mobile app":
+            for i=0 to i < (mobile_app_intents).length by i += 1: 
+                if mobile_app_intents[i] in mni_intents: user_intent = mobile_nodes_names[i];
+        elif user_intent == "information systems":
+            for i=0 to i < (info_system_intents).length by i += 1: 
+                if info_system_intents[i] in mni_intents: user_intent = info_system_node_names[i];
+    # ---------------------  Handling multiple intents  ------------------------
+    
         if (here.title == "Meeting Prompt"){
             if user_intent in ["yes", "yes please", "yeah", "of course", "absolutely", "I'd like that"]: user_intent = "yes";
             if user_intent in ["negative", "no", "not"]: user_intent = "no";
