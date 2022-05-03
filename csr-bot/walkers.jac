@@ -86,23 +86,15 @@ walker talker{
         std.out(intent_path.length);
         prev_nodes = [];
 
-        # ---------------------  Handling only 1 intent  ------------------------
         if here.title in ["Website", "one_pager", "five_pager", "other_website"] and user_intent in personal_intents: user_intent = "personal";
         if here.title in ["Website", "one_pager", "five_pager", "other_website"] and user_intent in website_description_intents{
             if user_intent in ["financial", "marketing", "personal", "custom"]: user_intent = "web_"+user_intent;
             if user_intent in ["hr", "human resources"]: user_intent = "web_hr";
         }
-
-        if here.title == "Information systems" and user_intent in info_system_intents{
-            user_intent_index = info_system_intents.list::index(user_intent);
-            user_intent = info_system_node_names[user_intent_index];
-        }
-
         if user_intent in intents_list{
             user_intent_index = intents_list.list::index(user_intent);
             user_intent = node_name_list[user_intent_index];
         }
-        # ---------------------  Handling only 1 intent  ------------------------
 
         if(here.title in ["Website Description", "Mobile Description", "IS Description"]): take -[transition(intent=="from_"+here.name+"_to_meeting")]-> node::state;
         elif(here.title == "Email Prompt" and user_intent != "back"): take -[transition(intent == "thank_you")]-> node::state;
