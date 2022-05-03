@@ -10,7 +10,7 @@ walker talker{
     info_system_node_names = ["educational_is", "hr_is", "financial_is", "logistics_mis", "custom_is"];
     
     current_intents = [];
-    about_intents = ["about", "what does v75 do", "what do you do", "tell me more about your company", "tell me more about what you do"];
+    about_intents = ["about", "what does v75 do", "what do you do"];
     for a in about_intents: current_intents.list::append(a);
     contact_intents = ["contact", "how can I contact v75", "where is v75 located", "where are you located", "telephone number"];
     for a in contact_intents: current_intents.list::append(a);
