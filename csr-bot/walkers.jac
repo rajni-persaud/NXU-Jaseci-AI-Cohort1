@@ -128,7 +128,6 @@ walker talker{
                 if (user_intent not in ["back", "goodbye", "yes", "no"]): user_intent = "from_"+here.name+"_to_"+user_intent;
                 std.out(user_intent);
                 if (user_intent == "back"): user_intent = "back_"+user_path[user_path.length-count_b];
-                # report{"utterance":utterance, "user_intent":user_intent, "scores":a_scores};
                 take -[transition(intent == user_intent)]-> node::state else: take here;
         } 
     }
