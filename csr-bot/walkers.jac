@@ -44,7 +44,6 @@ walker talker{
 
         if(here.title not in ["Website Description", "Mobile Description", "IS Description", "payment"]): utterance = std.input("> ");
 
-        # ----------------  Using USE to find the highest intent  ---------------
         q_enc = use.enc_question(utterance);
         a_enc = use.enc_answer(current_intents); # can take lists or single strings
 
@@ -63,25 +62,6 @@ walker talker{
         max_index = a_scores.list::index(max_score);
 
         user_intent = current_intents[max_index];
-    # ----------------  Using USE to find the highest intent  ---------------
-
-    # ---------------------  Breaking up utterance  ------------------------
-     u_word = utterance.str::split;
-     mini_utterance = [];
-     mini = "";
-     num = 1;
-     for i in u_word {
-        mini = mini + " " + i;
-        num = num + 1;
-
-        if num == 3{
-            mini_utterance.list::append(mini);
-            num = 1;
-            mini = "";
-        }
-    }
-    // std.out(mini_utterance);
-    # ---------------------  Breaking up utterance  ------------------------
 
         if (here.title == "Meeting Prompt"){
             if user_intent in ["yes", "yes please", "yeah", "of course", "absolutely", "I'd like that"]: user_intent = "yes";
@@ -89,21 +69,21 @@ walker talker{
             if (user_intent != "no" or user_intent != "yes"): if utterance.str::lower == "yes": user_intent = "yes";
         }
 
-        // std.out("-------------------------------------------------");
-        // std.out("message:", here.message);
-        // std.out("utterance:", utterance);
-        // std.out("here.title: ", here.title);
-        // std.out("here.name: ", here.name);
-        // std.out("Current intents to choose from: ", current_intents);
-        // std.out("Intent from user: ", user_intent);
-        // std.out("-------------------------------------------------");
+        std.out("-------------------------------------------------");
+        std.out("message:", here.message);
+        std.out("utterance:", utterance);
+        std.out("here.title: ", here.title);
+        std.out("here.name: ", here.name);
+        std.out("Current intents to choose from: ", current_intents);
+        std.out("Intent from user: ", user_intent);
+        std.out("-------------------------------------------------");
          
         user_path.list::append(here.name);
-        // std.out(user_path);
-        // std.out(user_path.length);
+        std.out(user_path);
+        std.out(user_path.length);
         intent_path.list::append(user_intent);
-        // std.out(intent_path);
-        // std.out(intent_path.length)
+        std.out(intent_path);
+        std.out(intent_path.length);
 
         # ---------------------  Handling only 1 intent  ------------------------
         if here.title in ["Website", "one_pager", "five_pager", "other_website"] and user_intent in personal_intents: user_intent = "personal";
@@ -134,18 +114,18 @@ walker talker{
                 back_num = 0;
                 # ind = 0;
                 back_index = 1;
-                // std.out("user_path_count_b", user_path[user_path.length-count_b]);
+                std.out("user_path_count_b", user_path[user_path.length-count_b]);
                 if(user_path[user_path.length-count_b] in ["web_financial", "web_hr", "web_marketing", "web_personal", "web_custom", "meeting"]): count_b = count_b + 1;
                 while(intent_path[intent_path.length-back_index] == "back"){
                     back_num = back_num + 1;
                     back_index = back_index + 1;
                 }
-                // std.out("back_num : ", back_num);
-                // std.out("count_b : ", count_b);
+                std.out("back_num : ", back_num);
+                std.out("count_b : ", count_b);
                 if back_num > 1: count_b = count_b + back_num;
                 if back_num > 2: count_b = count_b + back_num - 1;
                 if (user_intent not in ["back", "goodbye", "yes", "no"]): user_intent = "from_"+here.name+"_to_"+user_intent;
-                // std.out(user_intent);
+                std.out(user_intent);
                 if (user_intent == "back"): user_intent = "back_"+user_path[user_path.length-count_b];
                 # report{"utterance":utterance, "user_intent":user_intent, "scores":a_scores};
                 take -[transition(intent == user_intent)]-> node::state else: take here;
