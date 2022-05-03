@@ -83,7 +83,7 @@ walker talker{
         }
     }
     if u_word[-1] not in mini_utterance[-1]: mini_utterance.list::append(u_word[-1]);
-    // std.out(mini_utterance);
+    std.out(mini_utterance);
     # ---------------------  Breaking up utterance  ------------------------
     # ---------------------  Using USE to find the intent of mini_utterrance  ------------------------
     mni_intents = [];
@@ -112,14 +112,11 @@ walker talker{
     // std.out(mni_intents);
     # ---------------------  Using USE to find the intent of mini_utterrance  ------------------------
     # ---------------------  Handling multiple intents  ------------------------
-        if user_intent == "website"{ 
-            for i=0 to i < (website_intents).length by i += 1{
-                 if website_intents[i] in mni_intents: user_intent = website_nodes_names[i];
-            }
-            for i=0 to i < (website_description_intents).length by i += 1{
+        if user_intent == "website": 
+            for i=0 to i < (website_intents).length by i += 1: 
+                if website_intents[i] in mni_intents: user_intent = website_nodes_names[i];
+            for i=0 to i < (website_description_intents).length by i += 1: 
                 if website_description_intents[i] in mni_intents: user_intent = "web_"+website_description_intents[i];
-            }
-        }    
         elif user_intent == "mobile app":
             for i=0 to i < (mobile_app_intents).length by i += 1: 
                 if mobile_app_intents[i] in mni_intents: user_intent = mobile_nodes_names[i];
