@@ -15,9 +15,17 @@ walker talker{
     website_intents = ["one page", "5-page", "custom","payment", "back", "goodbye"];
     mobile_app_intents = ["game", "social", "custom", "payment", "back", "goodbye"];
     info_system_intents = ["education", "human resources", "financial", "logistics", "custom", "back", "payment", "goodbye"];
-    website_description_intents = ["financial", "hr", "marketing", "personal", "custom", "back"];
+    website_description_intents = ["financial", "hr", "marketing", "personal", "custom", "meeting", "back"];
     yes_no_intents = ["yes", "yeah", "yes please", "of course", "absolutely", "I'd like that", "negative", "no", "not", "back", "goodbye"];
     default_intents = ["back", "payment", "goodbye"];
+
+    work_samples = {
+        'web_financial':'https://v75inc.com/finance',
+        'web_hr':'https://v75inc.com/team',
+        'web_marketing':'https://v75inc.com/marketing',
+        'web_personal':'https://eldonmarks.com/',
+        'web_custom':'https://v75inc.com/'
+    };
 
     state {
         for a in about_intents{
@@ -92,7 +100,13 @@ walker talker{
         prev_nodes = [];
         std.out(user_path);
         
-        if(here.title in ["Website Description", "Mobile Description", "IS Description"]): take -[transition(intent=="meeting")]-> node::state;
+        if(here.title == "Website Description"){
+            #web_sample_link = work_samples['web_'+user_intent];
+            take -[transition(intent=="meeting")]-> node::state;
+            #std.out("Here's a sample of a",user_intent,"website built by us:",web_sample_link);
+        }
+        elif(here.title == "Mobile Description"): take -[transition(intent=="meeting")]-> node::state;
+        elif(here.title == "IS Description"): take -[transition(intent=="meeting")]-> node::state;
         elif(here.title == "Email Prompt"): take -[transition(intent == "thank_you")]-> node::state;
         elif(here.title == "payment"): take -[transition(intent == "pay")]-> node::state;
             else{
