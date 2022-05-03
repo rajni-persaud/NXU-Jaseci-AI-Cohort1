@@ -65,40 +65,23 @@ graph main_graph {
 
         one_pager = spawn website -[transition(intent="one page")]-> node::state(
                         name = "one_pager",
-                        title = "one_pager",
+                        title = "Website Description",
                         message = "What would your one-page website be based on?"
                     );
 
         five_pager = spawn website -[transition(intent="5-page")]-> node::state(
                         name = "five_pager",
-                        title = "five_pager",
+                        title = "Website Description",
                         message = "Who are you hoping to target with your 5-page website?"
                     );
 
         other_website = spawn website -[transition(intent="custom")]-> node::state(
                         name = "other_website",
-                        title = "other_website",
+                        title = "Website Description",
                         message = "What features are you looking to include on your custom website?"
                     );
-
-        work_samples = {
-        'web_financial':'https://v75inc.com/finance',
-        'web_hr':'https://v75inc.com/team',
-        'web_marketing':'https://v75inc.com/marketing',
-        'web_personal':'https://eldonmarks.com/',
-        'web_custom':'https://v75inc.com/'
-        };
-
+        
         website_nodes =[one_pager, five_pager, other_website];  // This list contains all node connected to website node
-
-        for k in work_samples.d::keys{
-            web_intent = k.str::split("_")[1];
-            k = spawn node::state(name = k , title="Website Description", message="Here's a sample of a "+web_intent+" website built by us: "+work_samples['web_'+web_intent]);
-            k -[transition(intent="meeting")]-> meeting_node; // create edge to meeting node
-            all_nodes.list::append(k);
-            for website_node in website_nodes: website_node -[transition(intent=web_intent)]-> k;
-        }
-
         for i in website_nodes {
             all_nodes.list::append(i);      // added website nodes to all nodes list
             website <-[transition(intent="back")]- i;   // create edge from each website_node back to website
