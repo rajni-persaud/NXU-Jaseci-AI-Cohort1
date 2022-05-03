@@ -50,7 +50,7 @@ graph main_graph {
         about_us_node = spawn node::state(name = "about_us", title="About us", message="We're on a mission to engineer a better world with the right combination of creativity, spirit, community and technology. This commitment has led us to create an environment which raises brilliant specialists on cutting-edge technology career pathways.");
         all_nodes.list::append(about_us_node); // added about node to all nodes list
 
-        contact_node = spawn node::state(name = "contact_us", title="contact", message="We are located at: https://goo.gl/maps/dq3L8yXYEUnXbKuFA. Feel free to contact us anytime on +592-641-5808 or send us an email at operarions@v75inc.com");
+        contact_node = spawn node::state(name = "contact_us", title="contact", message="Feel free to contact us anytime on +592-641-5808 or send us an email at operarions@v75inc.com");
         all_nodes.list::append(contact_node); // added contact node to all nodes list
 
         bye_node = spawn node::state(name = "goodbye", title="Goodbye", message="I'm always happy to help. Stay safe!");
