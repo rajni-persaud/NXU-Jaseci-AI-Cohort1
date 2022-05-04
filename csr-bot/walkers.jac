@@ -3,38 +3,116 @@ walker talker{
 
     has utterance;
     has user_path = []; // This varible will store the previous node the walker has been on before take
-    has intent_path = [];
 
     website_nodes_names =["one_pager", "five_pager", "other_website"];
     mobile_nodes_names = ["social", "gaming", "other_mobile_app"];
     info_system_node_names = ["educational_is", "hr_is", "financial_is", "logistics_mis", "custom_is"];
     
     current_intents = [];
-    about_intents = ["about", "what does v75 do", "what do you do", "tell me more about your company", "tell me more about what you do"];
-    for a in about_intents: current_intents.list::append(a);
+    about_intents = ["about", "what does v75 do", "what do you do"];
     contact_intents = ["contact", "how can I contact v75", "where is v75 located", "where are you located", "telephone number"];
-    for a in contact_intents: current_intents.list::append(a);
-    main_intents = ["website", "mobile app", "information systems", "back", "goodbye"];
-    for a in main_intents: current_intents.list::append(a);
-    website_intents = ["one page", "5-page", "custom"];
-    for a in website_intents: current_intents.list::append(a);
-    mobile_app_intents = ["social", "game", "custom"];
-    for a in mobile_app_intents: current_intents.list::append(a);
-    info_system_intents = ["education", "human resources", "financial", "logistics", "custom"];
-    for a in info_system_intents: current_intents.list::append(a);
-    website_description_intents = ["financial", "hr", "marketing", "personal", "custom"];
-    for a in website_description_intents: current_intents.list::append(a);
-    yes_no_intents = ["yes", "yeah", "yes please", "of course", "absolutely", "I'd like that", "negative", "no", "not"];
-    for a in yes_no_intents: current_intents.list::append(a);
-    payment_intents = ["how much will it cost", "what is the price", "how much do I owe you", "how much money should I pay for this"];
-    for a in payment_intents: current_intents.list::append(a);
-    personal_intents = ["about me", "my life", "family"];
-    for a in personal_intents: current_intents.list::append(a);
 
-    intents_list = ["website", "mobile app", "information systems", "one page", "5-page", "game", "social"];
-    node_name_list = ["website", "mobile_app", "info_system", "one_pager", "five_pager", "gaming", "social"];
+    main_intents = [
+        "website",
+        "mobile app",
+        "information systems",
+        "payment",
+        "back",
+        "goodbye"
+    ];
+
+    website_intents = [
+        "one page", 
+        "5-page", 
+        "custom",
+        "payment",
+        "back",
+        "goodbye"
+    ];
+
+    mobile_app_intents = [
+        "game", 
+        "social", 
+        "custom",
+        "payment",
+        "back",
+        "goodbye"
+    ];
+
+    info_system_intents = [
+        "education",
+        "human resources",
+        "financial",
+        "logistics",
+        "custom",
+        "back",
+        "payment",
+        "goodbye"
+    ];
+
+    website_description_intents = [
+        "financial",
+        "hr",
+        "marketing",
+        "personal",
+        "custom",
+        "back"
+    ];
+
+        yes_no_intents = [
+        "yes",
+        "yeah",
+        "yes please",
+        "of course",
+        "absolutely",
+        "I'd like that",
+        "negative",
+        "no",
+        "not",
+        "back",
+        "goodbye"
+    ];
+    
+    default_intents = [
+        "back",
+        "payment",
+        "goodbye"
+    ];
+
+    work_samples = {
+        'web_financial':'https://v75inc.com/finance',
+        'web_hr':'https://v75inc.com/team',
+        'web_marketing':'https://v75inc.com/marketing',
+        'web_personal':'https://eldonmarks.com/',
+        'web_custom':'https://v75inc.com/'
+    };
 
     state {
+        for a in about_intents{
+            main_intents.list::append(a);
+            website_intents.list::append(a);
+            mobile_app_intents.list::append(a);
+            info_system_intents.list::append(a); 
+            default_intents.list::append(a); 
+        }
+
+        for c in contact_intents{
+            main_intents.list::append(c);
+            website_intents.list::append(c);
+            mobile_app_intents.list::append(c);
+            info_system_intents.list::append(c); 
+            default_intents.list::append(c); 
+        }
+
+        current_intents = default_intents;
+
+        if (here.title in ["Main", "thank you", "About us", "contact"]): current_intents = main_intents;
+        if (here.title == "Website"): current_intents = website_intents;
+        if (here.title == "Mobile App"): current_intents = mobile_app_intents;
+        if (here.title == "Information systems"): current_intents = info_system_intents;
+        if (here.title == "Website Description"): current_intents = website_description_intents;
+        if (here.title == "Meeting Prompt"): current_intents = yes_no_intents;
+
         if(here.title == "Goodbye"){
             std.out(here.message);
             disengage;
@@ -42,9 +120,8 @@ walker talker{
 
         std.out(here.message);
 
-        if(here.title not in ["Website Description", "Mobile Description", "IS Description", "payment"]): utterance = std.input("> ");
+        if(here.title not in ["Mobile Description", "IS Description", "payment"]): utterance = std.input("> ");
 
-        # ----------------  Using USE to find the highest intent  ---------------
         q_enc = use.enc_question(utterance);
         a_enc = use.enc_answer(current_intents); # can take lists or single strings
 
@@ -63,71 +140,7 @@ walker talker{
         max_index = a_scores.list::index(max_score);
 
         user_intent = current_intents[max_index];
-    # ----------------  Using USE to find the highest intent  ---------------
 
-    # ---------------------  Breaking up utterance  ------------------------
-     u_word = utterance.str::split;
-     mini_utterance = [];
-     mini = "";
-     num = 1;
-     if u_word.length < 3: mini_utterance.list::append(utterance);
-     else:
-     for i in u_word {
-        mini = mini + " " + i;
-        num = num + 1;
-
-        if num == 3{
-            mini_utterance.list::append(mini);
-            num = 1;
-            mini = "";
-        }
-    }
-    if u_word[-1] not in mini_utterance[-1]: mini_utterance.list::append(u_word[-1]);
-    // std.out(mini_utterance);
-    # ---------------------  Breaking up utterance  ------------------------
-    # ---------------------  Using USE to find the intent of mini_utterrance  ------------------------
-    mni_intents = [];
-    for u in mini_utterance{
-        mini_q_enc = use.enc_question(u);
-        mini_a_enc = use.enc_answer(current_intents); # can take lists or single strings
-
-        mini_a_scores=[];
-
-        mini_max_score = 0;
-
-        for i in mini_a_enc:
-            mini_a_scores.l::append(vector.cosine_sim(mini_q_enc, i));
-
-        for i in mini_a_scores {
-            if i > mini_max_score: 
-                mini_max_score = i;
-        }
-
-        mini_max_index = mini_a_scores.list::index(mini_max_score);
-
-        mini_user_intent = current_intents[mini_max_index];
-
-        mni_intents.list::append(mini_user_intent);
-    }
-    // std.out(mni_intents);
-    # ---------------------  Using USE to find the intent of mini_utterrance  ------------------------
-    # ---------------------  Handling multiple intents  ------------------------
-        if user_intent == "website"{ 
-            for i=0 to i < (website_intents).length by i += 1{
-                 if website_intents[i] in mni_intents: user_intent = website_nodes_names[i];
-            }
-            for i=0 to i < (website_description_intents).length by i += 1{
-                if website_description_intents[i] in mni_intents: user_intent = "web_"+website_description_intents[i];
-            }
-        }    
-        elif user_intent == "mobile app":
-            for i=0 to i < (mobile_app_intents).length by i += 1: 
-                if mobile_app_intents[i] in mni_intents: user_intent = mobile_nodes_names[i];
-        elif user_intent == "information systems":
-            for i=0 to i < (info_system_intents).length by i += 1: 
-                if info_system_intents[i] in mni_intents: user_intent = info_system_node_names[i];
-    # ---------------------  Handling multiple intents  ------------------------
-    
         if (here.title == "Meeting Prompt"){
             if user_intent in ["yes", "yes please", "yeah", "of course", "absolutely", "I'd like that"]: user_intent = "yes";
             if user_intent in ["negative", "no", "not"]: user_intent = "no";
@@ -144,55 +157,28 @@ walker talker{
         // std.out("-------------------------------------------------");
          
         user_path.list::append(here.name);
+        prev_nodes = [];
         // std.out(user_path);
-        // std.out(user_path.length);
-        intent_path.list::append(user_intent);
-        // std.out(intent_path);
-        // std.out(intent_path.length)
-
-        # ---------------------  Handling only 1 intent  ------------------------
-        if here.title in ["Website", "one_pager", "five_pager", "other_website"] and user_intent in personal_intents: user_intent = "personal";
-        if here.title in ["Website", "one_pager", "five_pager", "other_website"] and user_intent in website_description_intents{
-            if user_intent in ["financial", "marketing", "personal", "custom"]: user_intent = "web_"+user_intent;
-            if user_intent in ["hr", "human resources"]: user_intent = "web_hr";
+        
+        if(here.title == "Website Description" and user_intent != "back"){
+            web_sample_link = work_samples['web_'+user_intent];
+            take -[transition(intent=="meeting")]-> node::state;
+            std.out("Here's a sample of a",user_intent,"website built by us:",web_sample_link);
         }
-
-        if here.title == "Information systems" and user_intent in info_system_intents{
-            user_intent_index = info_system_intents.list::index(user_intent);
-            user_intent = info_system_node_names[user_intent_index];
-        }
-
-        if user_intent in intents_list{
-            user_intent_index = intents_list.list::index(user_intent);
-            user_intent = node_name_list[user_intent_index];
-        }
-        # ---------------------  Handling only 1 intent  ------------------------
-
-        if(here.title in ["Website Description", "Mobile Description", "IS Description"]): take -[transition(intent=="from_"+here.name+"_to_meeting")]-> node::state;
-        elif(here.title == "Email Prompt" and user_intent != "back"): take -[transition(intent == "thank_you")]-> node::state;
+        elif(here.title == "Mobile Description"): take -[transition(intent=="meeting")]-> node::state;
+        elif(here.title == "IS Description"): take -[transition(intent=="meeting")]-> node::state;
+        elif(here.title == "Email Prompt"): take -[transition(intent == "thank_you")]-> node::state;
         elif(here.title == "payment"): take -[transition(intent == "pay")]-> node::state;
             else{
-                if (user_intent in about_intents): user_intent = "about_us";
-                if (user_intent in contact_intents): user_intent = "contact_us";
-                if (user_intent in payment_intents): user_intent = "payment";
-                count_b = 2;
-                back_num = 0;
-                # ind = 0;
-                back_index = 1;
-                // std.out("user_path_count_b", user_path[user_path.length-count_b]);
-                if(user_path[user_path.length-count_b] in ["web_financial", "web_hr", "web_marketing", "web_personal", "web_custom", "meeting"]): count_b = count_b + 1;
-                while(intent_path[intent_path.length-back_index] == "back"){
-                    back_num = back_num + 1;
-                    back_index = back_index + 1;
-                }
-                // std.out("back_num : ", back_num);
-                // std.out("count_b : ", count_b);
-                if back_num > 1: count_b = count_b + back_num;
-                if back_num > 2: count_b = count_b + back_num - 1;
-                if (user_intent not in ["back", "goodbye", "yes", "no"]): user_intent = "from_"+here.name+"_to_"+user_intent;
-                // std.out(user_intent);
-                if (user_intent == "back"): user_intent = "back_"+user_path[user_path.length-count_b];
-                # report{"utterance":utterance, "user_intent":user_intent, "scores":a_scores};
+                if (user_intent in about_intents): user_intent = "about-us";
+                if (user_intent in contact_intents): user_intent = "contact-us";
+                if (user_intent == "back" and here.name == "meeting"): for item in user_path: if (item != "meeting"): prev_nodes.list::append(item);
+                if (user_intent == "back" and here.name == "meeting" and prev_nodes[-1] in website_nodes_names): user_intent = prev_nodes[-1]+"_back";
+                if (user_intent == "back" and here.name == "meeting" and prev_nodes[-1] in mobile_nodes_names): user_intent = "mobile_app_back";
+                if (user_intent == "back" and here.name == "meeting" and prev_nodes[-1] in info_system_node_names): user_intent = "info_system_back";
+                if (user_intent == "back" and here.name == "thank_you"): for item in user_path: if (item != "thank_you"): prev_nodes.list::append(item);
+                if (user_intent == "back" and here.name == "thank_you" and prev_nodes[-1] in ["meeting", "email"]): user_intent = prev_nodes[-1]+"_back";
+                // std.out(prev_nodes);
                 take -[transition(intent == user_intent)]-> node::state else: take here;
         } 
     }
