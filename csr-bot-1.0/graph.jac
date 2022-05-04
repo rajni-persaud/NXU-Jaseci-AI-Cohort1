@@ -17,7 +17,7 @@ graph main_graph {
         main_root = spawn node::state(
                         name = "main",
                         title = "Main",
-                        message = "Hi, How can I help you today?"
+                        message = "Welcome to V75, How can I help you today?"
                     );          // created main root node
         
         all_nodes.list::append(main_root); // added main_root node to all nodes list
