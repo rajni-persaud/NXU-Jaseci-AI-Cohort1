@@ -71,7 +71,7 @@ update_messages();
 
 function sendButton(){
     var utterance = inputField.value;
-    walker_run(walker, utterance);
+    walker_run('talker', utterance);
     update_messages();
 }
 function update_messages() {

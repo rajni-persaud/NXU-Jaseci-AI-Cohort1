@@ -2,7 +2,6 @@ walker talker{
     can use.enc_question, use.enc_answer;
 
     has conv_data = [];
-    conv_data = file.load_json('chat_data.json');
     has utterance = "";
     has user_intent;
     has user_path = []; // This varible will store the previous node the walker has been on before take
@@ -178,8 +177,8 @@ walker talker{
         # ---------------------  Handling only 1 intent  ------------------------
 
         if(here.title in ["Website Description", "Mobile Description", "IS Description"]): user_intent = "meeting";
-        if(here.title == "Email Prompt" and user_intent != "back"): response = -[transition(intent == "thank_you")]->;
-        elif(here.title == "payment"): response = -[transition(intent == "pay")]->;
+        if(here.title == "Email Prompt" and user_intent != "back"): take -[transition(intent == "thank_you")]-> node::state;
+        elif(here.title == "payment"): take -[transition(intent == "pay")]-> node::state;
             else{
                 if (user_intent in about_intents): user_intent = "about_us";
                 if (user_intent in contact_intents): user_intent = "contact_us";
@@ -202,25 +201,10 @@ walker talker{
                 // std.out(user_intent);
                 if (user_intent == "back"): user_intent = user_path[user_path.length-count_b];
                 # report{"utterance":utterance, "user_intent":user_intent, "scores":a_scores};
-                response = -[transition(intent == user_intent)]->;
-                // else: take-->node::hop_state;
+                take -[transition(intent == user_intent)]-> node::state else: take-->node::hop_state;
         }
-
-         nodeobj = {};
-         message = "";
-
-            if(!response) {
-                // message = "I'm not sure what you mean";
-                // nodeobj = here;
-                take-->node::hop_state;
-            } else {
-                message = response[0].message;
-                nodeobj = response[0];
-                // report [response, user_intent];
-                report {"message": message, "utterance": utterance, "intent": user_intent, "node": nodeobj}; 
-                disengage; 
-            }  
-
+        report conv_data;
+        disengage; 
     }
 
     hop_state {
@@ -228,21 +212,7 @@ walker talker{
         // std.out("utterance:", utterance);
         // std.out("Intent from user: ", user_intent);
         // std.out("-------------------------------------------------");
-        response =  -[transition(intent == user_intent)]->;
-        nodeobj = {};
-         message = "";
-
-            if(!response) {
-                // message = "I'm not sure what you mean";
-                // nodeobj = here;
-                take-->node::hop_state;
-            } else {
-                message = response[0].message;
-                nodeobj = response[0];
-                // report [response, user_intent];
-                report {"message": message, "utterance": utterance, "intent": user_intent, "node": nodeobj}; 
-                disengage; 
-            } 
+        take -[transition(intent == user_intent)]-> node::state;
     }
 
     root {
