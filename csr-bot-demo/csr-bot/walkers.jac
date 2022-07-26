@@ -2,7 +2,6 @@ walker talker{
     can use.enc_question, use.enc_answer;
 
     has conv_data = [];
-    conv_data = file.load_json('chat_data.json');
     has utterance = "";
     has user_intent;
     has user_path = []; // This varible will store the previous node the walker has been on before take
@@ -38,6 +37,7 @@ walker talker{
     node_name_list = ["website", "mobile_app", "info_system", "one_pager", "five_pager", "gaming", "social"];
     
     state {
+        conv_data = file.load_json('chat_data.json');
         if(here.title == "Goodbye"){
             // std.out(here.message);
             conv_data.l::append(["bot", here.message]);
@@ -50,8 +50,10 @@ walker talker{
         file.dump_json('chat_data.json', conv_data);
 
         // if(here.title not in ["Website Description", "Mobile Description", "IS Description", "payment"]): utterance = std.input("> ");
-        conv_data.l::append(["user", utterance]);
-        file.dump_json('chat_data.json', conv_data);
+        if(here.title not in ["Website Description", "Mobile Description", "IS Description", "payment"]){
+            conv_data.l::append(["user", utterance]);
+            file.dump_json('chat_data.json', conv_data);
+        }
 
         # ----------------  Using USE to find the highest intent  ---------------
         q_enc = use.enc_question(utterance);
