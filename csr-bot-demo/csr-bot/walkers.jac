@@ -216,10 +216,11 @@ walker talker{
                 // nodeobj = here;
                 take-->node::hop_state;
             } else {
+                title = response[0].title;
                 message = response[0].message;
                 nodeobj = response[0];
                 // report [response, user_intent];
-                report {"message": message, "utterance": utterance, "intent": user_intent, "node": nodeobj}; 
+                report {"message": message, "title": title, "utterance": utterance, "intent": user_intent, "node": nodeobj}; 
                 disengage; 
             }  
 
@@ -239,10 +240,11 @@ walker talker{
                 // nodeobj = here;
                 take-->node::hop_state;
             } else {
+                title = response[0].title;
                 message = response[0].message;
                 nodeobj = response[0];
                 // report [response, user_intent];
-                report {"message": message, "utterance": utterance, "intent": user_intent, "node": nodeobj}; 
+                report {"message": message, "title": title, "utterance": utterance, "intent": user_intent, "node": nodeobj}; 
                 disengage; 
             } 
     }
