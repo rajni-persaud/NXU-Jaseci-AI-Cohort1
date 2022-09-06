@@ -67,8 +67,17 @@ var chat_messages = [];
 //     },
 // });
 
+function extractEmails(text){
+  return text.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi);
+}
+
+function detectURLs(text) {
+  var urlRegex = /(((https?:\/\/)|(www\.))[^\s]+)/g;
+  return text.match(urlRegex)
+}
+
 if (chat_messages.length < 1){
-  chat_messages = [["bot", "Welcome to V75, How can I help you today?"]];
+  chat_messages = [["bot", "Welcome to V75 Inc. How can we help you today?"]];
 }
 
 let conv = "";
@@ -77,6 +86,7 @@ update_messages();
 
 function meeting_msg() {
   chat_messages.push(["bot", "If you'd like, We'll be happy to set up a meeting with one of our developers."]);
+  chat_messages.push(["bot", "Please give us a call on +592-660-1234 or send us an email at <a href='mailto:operations@v75inc.com'>operations@v75inc.com</a>"]);
 }
 
 function sendButton(){
@@ -90,28 +100,48 @@ function sendButton(){
       // console.log(last_title);
 
       // chat_messages.push(["user", utterance]);
-      chat_messages.push(["bot", result.report[0].message]);
-
-      update_messages();
 
       if(result.report[0]) {
+
+        if (result.report[0].message){
+          message = result.report[0].message;
+          if (extractEmails(message)){
+            message = message.replace(extractEmails(message), "<a href='mailto:"+extractEmails(message)+"'>"+extractEmails(message)+"</a>");
+          }
+          if (detectURLs(message)){
+            message = message.replace(detectURLs(message), "<a href='"+detectURLs(message)+"' target='_blank'>"+detectURLs(message)+"</a>");
+          }
+          chat_messages.push(["bot", message]);
+        }
+        update_messages();
 
         //if we have an intent, we save the position on graph, otherwise we reset to root
         if(result.report[0].intent) { 
           last_jid = result.report[0].node.jid;
           last_title = result.report[0].title;
           last_intent = result.report[0].intent;
-          console.log(last_jid, last_title);
+          console.log(last_jid, last_title, last_intent);
         } else last_jid = null;
 
         if((last_title == "Website Description")||(last_title == "Mobile Description")||(last_title == "IS Description")) { 
           meeting_msg();
-          last_jid = "urn:uuid:23e5a5c6-ec6a-4b1c-b040-39299fe9623c";
+          last_jid = "urn:uuid:3b7eae77-435e-489a-a8ae-570e43c2fc34";
+          chat_messages.push(["bot", "Thank you! What else can we help you with?"]);
+          update_messages();
+        }
+        if((last_title == "payment")) { 
+          last_jid = "urn:uuid:3b7eae77-435e-489a-a8ae-570e43c2fc34";
+          chat_messages.push(["bot", "Thank you! What else can we help you with?"]);
           update_messages();
         }
 
         //show the response message in the chat
-      } else last_jid = null;
+      } 
+      else {
+        last_jid = null;
+        chat_messages.push(["bot", "Hmm.. I don't understand what you mean."]);
+        update_messages();
+      }
 
     }).catch(function (error) {
         console.log(error);
@@ -135,6 +165,7 @@ function update_messages() {
       }
       document.getElementById("chatbox").innerHTML = conv;
       document.getElementById("chat-bar-bottom").scrollIntoView(true);
+      inputField.value = '';
 }
 
 function walker_run(name, utterance="", nd = null) {

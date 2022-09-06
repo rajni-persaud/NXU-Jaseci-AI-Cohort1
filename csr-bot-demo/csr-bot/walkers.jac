@@ -179,8 +179,8 @@ walker talker{
         }
         # ---------------------  Handling only 1 intent  ------------------------
 
-        if(here.title in ["Website Description", "Mobile Description", "IS Description"]): user_intent = "meeting";
-        if(here.title == "Email Prompt" and user_intent != "back"): response = -[transition(intent == "thank_you")]->;
+        if(here.title in ["Website Description", "Mobile Description", "IS Description"]): user_intent = "thank_you";
+        if(here.title in ["Website Description", "Mobile Description", "IS Description", "Email Prompt"] and user_intent != "back"): response = -[transition(intent == "thank_you")]->;
         elif(here.title == "payment"): response = -[transition(intent == "pay")]->;
             else{
                 if (user_intent in about_intents): user_intent = "about_us";
